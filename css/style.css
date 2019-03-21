@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+section#main-page{
+    height: 350px;
+ 
+}
+
+
+
+footer#main-footer {
+    padding: 20px 20px 20px 20px;
+   
+}
+footer#main-footer ul {
+    list-style: none;
+}

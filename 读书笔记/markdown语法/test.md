@@ -7,6 +7,6 @@
 
 这是第一个测试文件，用来测试跳转第二个页面
 
-[跳到第二个](https://shane97luo.github.io\读书笔记\markdown语法\test1.md)
+[跳到第二个](https://shane97luo.github.io\读书笔记\markdown语法\test1)
 
 <a href="https://shane97luo.github.io\读书笔记\markdown语法\test1">多个</a>

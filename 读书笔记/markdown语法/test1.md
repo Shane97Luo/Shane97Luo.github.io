@@ -7,6 +7,6 @@
 
 这是第二个测试文件，用来测试跳转第一个页面
 
-[跳到第一个](https://shane97luo.github.io\读书笔记\markdown语法\test.md)
+[跳到第一个](https://shane97luo.github.io\读书笔记\markdown语法\test)
 
 <a href="https://shane97luo.github.io\读书笔记\markdown语法\test">华为</a>

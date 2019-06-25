@@ -8,8 +8,7 @@ Qt中的中文显示，经常会出现乱码，但在UI设计界面上添加的�
 ### v-4.8及其以下
 
 ```c++
-#include < QTextCodec >
-
+#include <QTextCodec>
 QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF8"));
 QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF8"));
 QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF8"));

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>贪吃蛇</title>
+
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="./snake.js"></script> -->
+</head>
+
+<body>
+
+    <p id="record">score:</p>
+    <canvas id="snake" width="480" height="500"> 贪吃蛇 </canvas>
+    <script src="./snake.js"></script>
+
+    <br>
+
+    <input type='button' value='run' onclick='run()'>
+    <input type='button' value='stop' onclick='stop()'>
+
+
+    var r=confirm("按下按钮");
+    if (r==true)
+    {
+    x="你按下了\"确定\"按钮!";
+    }
+    else
+    {
+    x="你按下了\"取消\"按钮!";
+    }
+</body>
+
+</html>

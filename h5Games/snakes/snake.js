@@ -17,7 +17,7 @@ var map = new Array(mapWidth);
 // var snake = new Array();
 
 var snake = [[3, 1], [2, 1], [1, 1]];
-var snake2 = [[20, 23], [21, 23], [22, 23]];
+// var snake2 = [[20, 23], [21, 23], [22, 23]];
 // [!2-snake]
 
 var offset = {

@@ -20,3 +20,11 @@ nav#banner ul{
 nav#banner ul li{
   display: inline;
 }
+
+main{
+  padding: 40px;
+}
+
+footer{
+  padding: 40px;
+}

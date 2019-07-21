@@ -13,3 +13,13 @@ QSizePolicy::Preferred |- the sizeHint() is best, but the widget can be shrunk a
 QSizePolicy::Expanding | - the sizeHint() is a sensible size, but the widget can be shrunk and still be useful. The widget can make use of extra space, so it should get as much space as possible (e.g. the horizontal direction of a slider).缺省大小是合理的大小，但部件允许缩小并且可用。这个部件可以利用额外的空间，因此它将会得到尽可能多的空间。
 QSizePolicy::MinimumExpanding | - the sizeHint() is minimal, and sufficient. The widget can make use of extra space, so it should get as much space as possible (e.g. the horizontal direction of a slider).缺省大小是部件最小大小，并且是足够的。这个部件允许使用额外空间，因此它将会得到尽可能多的空间。
 QSizePolicy::Ignored | - the sizeHint() is ignored. The widget will get as much space as possible.缺省大小将会被忽略，这个部件会得到尽可能多的空间。
+
+### setWindowFlags
+
+```c++
+this->setWindowFlags(Qt::Dialog | Qt::WindowSystemMenuHint);
+this->setWindowFlags(windowFlags()&~Qt::WindowCloseButtonHint&~Qt::WindowContextHelpButtonHint);
+this->setWindowFlags(Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+this->this->setWindowFlags(Qt::WindowStaysOnTopHint);//窗体置顶
+```

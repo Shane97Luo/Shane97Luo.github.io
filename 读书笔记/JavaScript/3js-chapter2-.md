@@ -16,7 +16,6 @@ var offsetRo = 0.01;
 var offsetPos = 0.01;
 var cnt = 0;
 
-
 function initScene() {
     scene = new THREE.Scene();
 }
@@ -34,12 +33,10 @@ function initRenderer() {
 
 function initGeometry() {
     geometry = new THREE.CubeGeometry(1, 3, 1);
-    // var geometry1 = new THREE.CubeGeometry(2, 2, 2);
 }
 
 function initMaterial() {
     material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    // var material1 = new THREE.MeshBasicMaterial({ color: 0xffffff });
 }
 
 function initCube() {

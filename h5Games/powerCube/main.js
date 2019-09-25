@@ -31,11 +31,15 @@ function initThree() {
     width = window.innerWidth;
     height = window.innerHeight;
     renderer = new THREE.WebGLRenderer({
-        antialias: true
+        canvas: document.getElementById('mainCanvas'),
+        antialias: true,
+        alpha: true,
     });
     renderer.setSize(width, height);
-    renderer.setClearColor(0xFFFFFF, 1.0);
-    document.getElementById('canvas-frame').appendChild(renderer.domElement);
+    renderer.setClearColor(0xFFFFFF, 2.0);
+
+    //document.getElementById('canvas-frame').appendChild(renderer.domElement);
+
 }
 
 //创建相机，并设置正方向和中心点
@@ -43,7 +47,7 @@ var camera;
 var controller; //视角控制器
 function initCamera() {
     camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-    camera.position.set(0, 0, 600);
+    camera.position.set(500, 500, 500);
     camera.up.set(0, 1, 0); //正方向
     camera.lookAt(origPoint);
 }
@@ -67,7 +71,7 @@ var cubeParams = { //魔方参数
     x: 0,
     y: 0,
     z: 0,
-    num: 3,
+    num: 4,
     len: 50,
     colors: ['rgba(255,193,37,1)', 'rgba(0,191,255,1)',
         'rgba(50,205,50,1)', 'rgba(178,34,34,1)',
@@ -176,6 +180,7 @@ function initObject() {
 
 //渲染
 function render() {
+
     renderer.clear();
     renderer.render(scene, camera);
     window.requestAnimFrame(render);
@@ -206,6 +211,15 @@ function threeStart() {
 function stopCube() {
     intersect = null;
     startPoint = null
+}
+
+var lastValue;
+
+function numChange() {
+    this.flag = false;
+
+    var oOpt = document.getElementById('selNum').value;
+    cubeParams.num = oOpt;
 }
 
 //绕着世界坐标系的某个轴旋转
@@ -258,6 +272,7 @@ function moveCube(event) {
                 var sub = movePoint.sub(startPoint); //计算转动向量
                 var direction = getDirection(sub); //获得方向
                 var elements = getBoxs(intersect, direction);
+                console.log(elements);
                 var startTime = new Date().getTime();
                 window.requestAnimFrame(function(timestamp) {
                     rotateAnimation(elements, direction, timestamp, 0);
@@ -373,10 +388,10 @@ function getBoxs(target, direction) {
     }
     var minId = min(ids);
     targetId = targetId - minId;
-    var numI = parseInt(targetId / 9);
-    var numJ = targetId % 9;
+    var numI = parseInt(targetId / (cubeParams.num * cubeParams.num));
+    var numJ = targetId % (cubeParams.num * cubeParams.num);
     var boxs = [];
-    //根据绘制时的规律判断 no = i*9+j
+    //根据绘制时的规律判断 no = i*cubeParams.num^2+j
     switch (direction) {
         //绕z轴
         case 0.1:
@@ -389,7 +404,7 @@ function getBoxs(target, direction) {
         case 3.4:
             for (var i = 0; i < cubes.length; i++) {
                 var tempId = cubes[i].cubeIndex - minId;
-                if (numI === parseInt(tempId / 9)) {
+                if (numI === parseInt(tempId / (cubeParams.num * cubeParams.num))) {
                     boxs.push(cubes[i]);
                 }
             }
@@ -405,7 +420,7 @@ function getBoxs(target, direction) {
         case 5.4:
             for (var i = 0; i < cubes.length; i++) {
                 var tempId = cubes[i].cubeIndex - minId;
-                if (parseInt(numJ / 3) === parseInt(tempId % 9 / 3)) {
+                if (parseInt(numJ / cubeParams.num) === parseInt(tempId % (cubeParams.num * cubeParams.num) / cubeParams.num)) {
                     boxs.push(cubes[i]);
                 }
             }
@@ -421,7 +436,7 @@ function getBoxs(target, direction) {
         case 5.2:
             for (var i = 0; i < cubes.length; i++) {
                 var tempId = cubes[i].cubeIndex - minId;
-                if (tempId % 9 % 3 === numJ % 3) {
+                if (tempId % (cubeParams.num * cubeParams.num) % cubeParams.num === numJ % cubeParams.num) {
                     boxs.push(cubes[i]);
                 }
             }

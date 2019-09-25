@@ -6,3 +6,8 @@
 canvas#canvs3js {
     border: 2px solid rebeccapurple;
 }
+
+select {
+    font-size: 22px;
+    color: blueviolet;
+}

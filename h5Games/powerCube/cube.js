@@ -133,6 +133,20 @@ function initPlane() {
     scene.add(shapePlane);
 }
 
+
+//四面体
+var Tetra;
+
+function initTetra() {
+    var TetraGeo = new THREE.TetrahedronGeometry(5);
+    var TetraMaterial = new THREE.MeshLambertMaterial({ color: 0xffff00 });
+    Tetra = new THREE.Mesh(TetraGeo, TetraMaterial);
+
+    Tetra.position.set(20, 10, -5);
+    Tetra.camera = true;
+    scene.add(Tetra);
+}
+
 function initSphere() {
     var SphereGeometry = new THREE.SphereGeometry(5, 70, 70);
     // var SphereMaterial = new THREE.MeshBasicMaterial({ color: 0x7777ff, wireframe: true });
@@ -259,34 +273,21 @@ function initAll() {
 
     initSpotLight();
 
-    var cnt = 0;
-    for (let x = 0; x < 1; x++) {
-        for (let y = 0; y < 2; y++) {
-            for (let z = 0; z < 3; z++) {
-                initCube();
-                mf[cnt].position.x = cubeParm.oriPosX - 5.1 * x;
-                mf[cnt].position.y = cubeParm.oriPosY + 5.1 * y;
-                mf[cnt].position.z = cubeParm.oriPosZ + 5.1 * z;
+    initTetra();
 
-                cnt++;
-            }
-        }
-    }
+    // var cnt = 0;
+    // for (let x = 0; x < 1; x++) {
+    //     for (let y = 0; y < 2; y++) {
+    //         for (let z = 0; z < 3; z++) {
+    //             initCube();
+    //             mf[cnt].position.x = cubeParm.oriPosX - 5.1 * x;
+    //             mf[cnt].position.y = cubeParm.oriPosY + 5.1 * y;
+    //             mf[cnt].position.z = cubeParm.oriPosZ + 5.1 * z;
 
-    var group = new THREE.Object3D();
-    group.add(mf[0]);
-    group.add(mf[1]);
-    group.add(mf[2]);
-    scene.add(group);
-
-    var group1 = new THREE.Object3D();
-    group1.add(mf[3]);
-    group1.add(mf[4]);
-    group1.add(mf[5]);
-    scene.add(group1);
-
-    console.log(mf.length);
-
+    //             cnt++;
+    //         }
+    //     }
+    // }
     // initCube();
 
     initLine(); //线条

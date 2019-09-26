@@ -3,8 +3,16 @@
     padding: 0;
 }
 
-canvas#canvs3js {
+
+/* body {
+    margin: 20px;
+} */
+
+canvas#mainCanvas {
+    /* margin: 20px; */
+    padding: 2px;
     border: 2px solid rebeccapurple;
+    background-color: antiquewhite;
 }
 
 select#selNum {
@@ -12,5 +20,7 @@ select#selNum {
     left: 20px;
     top: 20px;
     font-size: 22px;
+    background-color: aqua;
     color: blueviolet;
+    border-radius: 6px;
 }

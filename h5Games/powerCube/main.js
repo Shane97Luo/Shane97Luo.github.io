@@ -35,8 +35,8 @@ function initThree() {
         antialias: true,
         alpha: true,
     });
-    renderer.setSize(width, height);
-    renderer.setClearColor(0xFFFFFF, 2.0);
+    renderer.setSize(width - 10, height - 10);
+    renderer.setClearColor(0x336699, 2.0);
 
     //document.getElementById('canvas-frame').appendChild(renderer.domElement);
 
@@ -57,6 +57,11 @@ var scene;
 
 function initScene() {
     scene = new THREE.Scene();
+
+    var axes = new THREE.AxesHelper(50);
+    axes.position.set(width / 2, 100, 100);
+    scene.add(axes);
+
 }
 
 //创建光线
@@ -231,12 +236,7 @@ function numChange() {
         lastValue = cubeParams.num;
         console.log("changed after", lastValue);
 
-        // var c = document.getElementById("myCanvas");
-        // var ctx = c.getContext("2d");
-        // ctx.fillStyle = "red";
-        // ctx.fillRect(0, 0, 300, 150);
-        // ctx.clearRect(20, 20, 100, 50);
-
+        //initObject();
         threeStart();
     }
 

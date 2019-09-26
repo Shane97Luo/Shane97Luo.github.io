@@ -213,13 +213,26 @@ function stopCube() {
     startPoint = null
 }
 
-var lastValue;
+var lastValue = cubeParams.num;
 
 function numChange() {
-    this.flag = false;
 
-    var oOpt = document.getElementById('selNum').value;
-    cubeParams.num = oOpt;
+    var selNum = document.getElementById('selNum').value;
+
+    if (selNum != lastValue) {
+        cubeParams.num = selNum;
+        lastValue = cubeParams.num;
+        console.log("changed");
+
+        // var c = document.getElementById("myCanvas");
+        // var ctx = c.getContext("2d");
+        // ctx.fillStyle = "red";
+        // ctx.fillRect(0, 0, 300, 150);
+        // ctx.clearRect(20, 20, 100, 50);
+
+        threeStart();
+    }
+
 }
 
 //绕着世界坐标系的某个轴旋转

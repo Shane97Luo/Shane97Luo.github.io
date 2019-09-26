@@ -184,6 +184,8 @@ function render() {
     renderer.clear();
     renderer.render(scene, camera);
     window.requestAnimFrame(render);
+
+    numChange();
 }
 
 //开始
@@ -217,12 +219,17 @@ var lastValue = cubeParams.num;
 
 function numChange() {
 
-    var selNum = document.getElementById('selNum').value;
+    var obj = document.getElementById('selNum');
+    var index = obj.selectedIndex; // 选中索引
+    var text = obj.options[index].text; // 选中文本
+    var value = obj.options[index].value; // 选中值
 
-    if (selNum != lastValue) {
-        cubeParams.num = selNum;
+    if (value != lastValue) {
+        console.log("changed", lastValue);
+
+        cubeParams.num = value;
         lastValue = cubeParams.num;
-        console.log("changed");
+        console.log("changed after", lastValue);
 
         // var c = document.getElementById("myCanvas");
         // var ctx = c.getContext("2d");

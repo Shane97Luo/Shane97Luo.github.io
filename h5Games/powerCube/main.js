@@ -239,6 +239,7 @@ var lastValue = cubeParams.num;
 
 function numChange() {
 
+    //获取下拉框值
     var obj = document.getElementById('selNum');
     var index = obj.selectedIndex; // 选中索引
     var text = obj.options[index].text; // 选中文本
@@ -250,6 +251,8 @@ function numChange() {
         cubeParams.num = value;
         lastValue = cubeParams.num;
         console.log("changed after", lastValue);
+
+        initStatus.splice(0, initStatus.length); //清空元素
 
         threeStart();
     }
@@ -306,7 +309,7 @@ function moveCube(event) {
                 var sub = movePoint.sub(startPoint); //计算转动向量
                 var direction = getDirection(sub); //获得方向
                 var elements = getBoxs(intersect, direction);
-                console.log("hello", elements);
+                console.log("element", elements);
                 var startTime = new Date().getTime();
                 window.requestAnimFrame(function(timestamp) {
                     rotateAnimation(elements, direction, timestamp, 0);

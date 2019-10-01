@@ -170,6 +170,10 @@ function initObject() {
         scene.add(cubes[i]); //并依次加入到场景中
     }
 
+    console.log("cube size", cubes.length);
+    console.log("cubeparam num", cubeParams.num);
+
+
     //透明正方体
     var cubegeo = new THREE.BoxGeometry(150, 150, 150);
     var hex = 0x000000;
@@ -222,6 +226,17 @@ function stopCube() {
 
 var lastValue = cubeParams.num;
 
+// function removeCube(total) {
+//     var allChildren = scene.children;
+//     for (let index = 0; index < total; index++) {
+//         var lastObject = allChildren[allChildren.length - 1];
+//         if (lastObject instanceof THREE.Mesh) {
+//             scene.remove(lastObject);
+//             this.numberOfObjects = scene.children.length;
+//         }
+//     }
+// }
+
 function numChange() {
 
     var obj = document.getElementById('selNum');
@@ -236,7 +251,6 @@ function numChange() {
         lastValue = cubeParams.num;
         console.log("changed after", lastValue);
 
-        //initObject();
         threeStart();
     }
 
@@ -292,7 +306,7 @@ function moveCube(event) {
                 var sub = movePoint.sub(startPoint); //计算转动向量
                 var direction = getDirection(sub); //获得方向
                 var elements = getBoxs(intersect, direction);
-                console.log(elements);
+                console.log("hello", elements);
                 var startTime = new Date().getTime();
                 window.requestAnimFrame(function(timestamp) {
                     rotateAnimation(elements, direction, timestamp, 0);
@@ -308,6 +322,7 @@ function moveCube(event) {
  */
 function rotateAnimation(elements, direction, currentstamp, startstamp, laststamp) {
     var totalTime = 500; //转动的总运动时间
+    console.log("elements.length", elements.length);
     if (startstamp === 0) {
         startstamp = currentstamp;
         laststamp = currentstamp;
@@ -440,7 +455,7 @@ function getBoxs(target, direction) {
         case 5.4:
             for (var i = 0; i < cubes.length; i++) {
                 var tempId = cubes[i].cubeIndex - minId;
-                if (parseInt(numJ / cubeParams.num) === parseInt(tempId % (cubeParams.num * cubeParams.num) / cubeParams.num)) {
+                if (parseInt(numJ / cubeParams.num) === (parseInt(tempId % (cubeParams.num * cubeParams.num) / cubeParams.num))) {
                     boxs.push(cubes[i]);
                 }
             }

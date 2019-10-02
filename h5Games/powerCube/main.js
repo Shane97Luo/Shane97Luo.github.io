@@ -253,6 +253,7 @@ function numChange() {
         console.log("changed after", lastValue);
 
         initStatus.splice(0, initStatus.length); //清空元素
+        console.log("initStatus.length", initStatus.length);
 
         threeStart();
     }
@@ -325,7 +326,7 @@ function moveCube(event) {
  */
 function rotateAnimation(elements, direction, currentstamp, startstamp, laststamp) {
     var totalTime = 500; //转动的总运动时间
-    console.log("elements.length", elements.length);
+    // console.log("elements.length", elements.length);
     if (startstamp === 0) {
         startstamp = currentstamp;
         laststamp = currentstamp;

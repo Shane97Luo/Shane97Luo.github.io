@@ -20,6 +20,8 @@ select#selNum {
     left: 20px;
     top: 20px;
     font-size: 22px;
+    width: 70px;
+    height: 40px;
     background-color: aqua;
     color: blueviolet;
     border-radius: 6px;

@@ -58,9 +58,10 @@ var scene;
 function initScene() {
     scene = new THREE.Scene();
 
-    var axes = new THREE.AxesHelper(50);
-    axes.position.set(width / 2, 100, 100);
-    scene.add(axes);
+    // 坐标系
+    // var axes = new THREE.AxesHelper(50);
+    // axes.position.set(width / 2, 100, 100);
+    // scene.add(axes);
 
 }
 

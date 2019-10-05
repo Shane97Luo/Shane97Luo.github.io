@@ -18,8 +18,10 @@
 
 <body onload="threeStart();">
 
+    <!--[a] 场景及魔方 -->
     <canvas id='mainCanvas'>fhdu</canvas>
 
+    <!--[b] 魔方种类选项下拉框 -->
     <select id="selNum" style="font-size: 22px">
         <option value ="2">二阶</option>
         <option value ="3">三阶</option>
@@ -31,16 +33,16 @@
         <option value="9">九阶</option> -->
       </select>
 
-    <!-- <div id='canvas-frame'></div> -->
+    <!-- 音效设置 -->
+    <audio id="turn" controls autoplay> 
+        <source src="./music/turn.mp3" type="audio/mp3"> 该浏览器不支持audio属性
+    </audio>
 
-    <!-- <script src="./canvas.js"></script>
+    <video controls="controls" autoplay="autoplay">
+            <source src="./music/turn.mp3" type="video/mp3" />
 
-    <script>
-        initAll();
-        console.log("hello");
-
-        initGui();
-    </script> -->
+          Your browser does not support the video tag.
+    </video>
 
     <script src="./main.js"></script>
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>powerCube</title>
+
+    <!-- <script src="https://cdn.bootcss.com/three.js/92/three.js"></script> -->
+
+    <script src="./libs./dat.gui.js"></script>
+    <script src="./libs/three.js"></script>
+
+    <script src="./libs/OrbitControls.js"></script>
+    <script src="./main.js"></script>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- <script src="./cube.js"></script> -->
+
+</head>
+
+<body onload="threeStart();">
+
+    <!--[a] 场景及魔方 -->
+    <canvas id='mainCanvas'>fhdu</canvas>
+
+    <!--[b] 手机 魔方种类选项下拉框 -->
+    <select id="selNum" style="font-size: 22px">
+        <option value ="2">二阶</option>
+        <option value ="3">三阶</option>
+        <option value="4" selected>四阶</option>
+        <option value="5">五阶</option>
+        <option value="6">六阶</option>
+        <option value="7">七阶</option>
+        <option value="8">八阶</option>
+        <option value="9">九阶</option>
+    </select>
+
+    <!-- 魔方样式选择菜单 -->
+    <div id="selTypeCube">
+        <div>常规魔方</div>
+        <div>1*N*N</div>
+        <div>金字塔魔方</div>
+        <div>常规魔方</div>
+    </div>
+
+    <div id="timer">
+        min sec
+    </div>
+
+    <div id="rank">
+
+    </div>
+
+    <!-- 音效设置 -->
+    <!-- <audio id="turn" controls autoplay loop> 
+        <source src="./music/turn.mp3" type="audio/mp3"> 该浏览器不支持audio属性
+    </audio> -->
+
+
+</body>
+
+</html>

@@ -10,6 +10,8 @@ var normalize; //触发平面法向量
 var startPoint; //触发点
 var movePoint;
 var initStatus = []; //魔方初始状态
+
+
 //魔方转动的六个方向
 var xLine = new THREE.Vector3(1, 0, 0); //X轴正方向
 var xLineAd = new THREE.Vector3(-1, 0, 0); //X轴负方向
@@ -17,6 +19,15 @@ var yLine = new THREE.Vector3(0, 1, 0); //Y轴正方向
 var yLineAd = new THREE.Vector3(0, -1, 0); //Y轴负方向
 var zLine = new THREE.Vector3(0, 0, 1); //Z轴正方向
 var zLineAd = new THREE.Vector3(0, 0, -1); //Z轴负方向
+
+var rotaDirection = new function() {
+    this.xposAxis = new THREE.Vector3(1, 0, 0); //X轴正方向
+    this.xnegAxi = new THREE.Vector3(-1, 0, 0); //X轴负方向
+    this.yposAxis = new THREE.Vector3(0, 1, 0); //Y轴正方向
+    this.ynegAxi = new THREE.Vector3(0, -1, 0); //Y轴负方向
+    this.zposAxis = new THREE.Vector3(0, 0, 1); //Z轴正方向
+    this.znegAxi = new THREE.Vector3(0, 0, -1); //Z轴负方向
+}
 
 window.requestAnimFrame = (function() { //如果有变化则可能还需要requestAnimationFrame刷新
     return window.requestAnimationFrame ||
@@ -60,7 +71,7 @@ function initScene() {
 
     // 坐标系
     // var axes = new THREE.AxesHelper(50);
-    // axes.position.set(width / 2, 100, 100);
+    // axes.position.set(0, 0, 0);
     // scene.add(axes);
 
 }
@@ -147,6 +158,7 @@ function faces(rgbaColor) {
     return canvas;
 }
 
+
 //创建展示场景所需的各种元素
 var cubes
 
@@ -174,7 +186,6 @@ function initObject() {
     console.log("cube size", cubes.length);
     console.log("cubeparam num", cubeParams.num);
 
-
     //透明正方体
     var cubegeo = new THREE.BoxGeometry(150, 150, 150);
     var hex = 0x000000;
@@ -188,6 +199,162 @@ function initObject() {
     scene.add(cube);
 }
 
+
+function initPlane() {
+    var PlaneGeometry = new THREE.PlaneGeometry(100, 100);
+    // var PlaneMaterial = new THREE.MeshBasicMaterial({ color: 0xAAAAAA });
+    var PlaneMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+
+    shapePlane = new THREE.Mesh(PlaneGeometry, PlaneMaterial);
+    shapePlane.rotation.x = -0.5 * Math.PI;
+    shapePlane.position.set(0, 0, 0);
+    shapePlane.receiveShadow = true;
+
+    scene.add(shapePlane);
+}
+
+for (let index = 0; index < 0; index++) {
+    console.log("ew");
+}
+
+
+var tetrParm = {
+    pos: { x: 0, y: 120, z: 0 },
+    length: 50
+}
+
+var pyramid; //金字塔魔方
+// var regTetrahedron = []; //四棱锥
+
+// 初始化三棱锥
+function initTetrahedrons(topPos, length, layerNum) {
+
+    // initRegTetr(topPos, length);
+
+    var pos = new Array();
+    var cnt = 0;
+
+    var test = {
+        x: topPos.x,
+        y: topPos.y + 90,
+        z: topPos.z
+    }
+    initRegTetr(test, length);
+    // scene.children[1].rotation.x += 30;
+    // console.log("child", scene.children.length);
+
+    initRegTetr(topPos, length);
+    for (let i = 0; i <= layerNum - 1; i++) {
+        for (let j = 0; j < i; j++) {
+            //左下角 ==>右下角
+            pos[0] = {
+                x: topPos.x - length / 2 * i + length * j,
+                y: topPos.y - (Math.sqrt(6) / 3) * length * i,
+                z: topPos.z + (Math.sqrt(3) / 6) * length * i
+            };
+            //右下角 ==> 后角
+            pos[1] = {
+                x: topPos.x + length / 2 * i - (length / 2) * j,
+                y: topPos.y - (Math.sqrt(6) / 3) * length * i,
+                z: topPos.z + (Math.sqrt(3) / 6) * length * i - (Math.sqrt(3) / 2) * length * j
+            };
+            //后角 ==>左下角
+            pos[2] = {
+                x: topPos.x - (length / 2) * j,
+                y: topPos.y - (Math.sqrt(6) / 3) * length * i,
+                z: topPos.z - (Math.sqrt(3) / 3) * length * i + (Math.sqrt(3) / 2) * length * j
+            };
+
+            for (let index = 0; index < pos.length; index++) {
+                initRegTetr(pos[index], length);
+                cnt++;
+            }
+
+
+        }
+    }
+    console.log("cnt:", cnt);
+}
+
+/* 生成单个三棱锥
+ * pos: 三棱锥顶点位置{x,y,z}
+ * length: 边长
+ */
+function initRegTetr(pos, length) {
+
+    var materialTetrahedron = new THREE.MeshLambertMaterial({
+        color: 0xffff00,
+        // wireframe: true
+    });
+
+    var vertices = [
+        new THREE.Vector3(pos.x,
+            pos.y,
+            pos.z),
+        new THREE.Vector3(pos.x - length / 2,
+            pos.y - (Math.sqrt(6) / 3) * length,
+            pos.z + (Math.sqrt(3) / 6) * length),
+        new THREE.Vector3(pos.x + length / 2,
+            pos.y - (Math.sqrt(6) / 3) * length,
+            pos.z + (Math.sqrt(3) / 6) * length),
+        new THREE.Vector3(pos.x,
+            pos.y - (Math.sqrt(6) / 3) * length,
+            pos.z - (Math.sqrt(3) / 3) * length)
+    ];
+
+    var faces = [
+        new THREE.Face3(0, 2, 1), //有效
+        // new THREE.Face3(1, 0, 2), //有效
+        // new THREE.Face3(1, 2, 1),
+        // new THREE.Face3(2, 1, 0), //有效
+        // new THREE.Face3(2, 0, 1),
+        // new THREE.Face3(0, 1, 2),
+
+
+        new THREE.Face3(0, 1, 3),
+
+        // new THREE.Face3(1, 2, 3),//有效
+        // new THREE.Face3(1, 3, 2),
+        // new THREE.Face3(3, 2, 1),
+        // new THREE.Face3(3, 1, 2),//有效
+        new THREE.Face3(2, 3, 1), //有效
+        // new THREE.Face3(2, 1, 3),
+
+        // new THREE.Face3(0, 2, 3),
+        // new THREE.Face3(0, 3, 2), //有效
+        // new THREE.Face3(2, 0, 3),//有效
+        // new THREE.Face3(2, 3, 0),
+        new THREE.Face3(3, 2, 0), //有效
+        // new THREE.Face3(3, 0, 2),
+
+    ]
+
+    var geom = new THREE.Geometry();
+    geom.vertices = vertices;
+    geom.faces = faces;
+    geom.computeFaceNormals();
+
+    tetrahedron = new THREE.Mesh(geom, materialTetrahedron);
+    tetrahedron.position.set(0, 0, 0);
+    tetrahedron.rotation.x += 0;
+    scene.add(tetrahedron);
+}
+
+var controls = new function() {
+    this.rotAnglex = 0;
+    this.rotAngley = 0;
+    this.rotAnglez = 0;
+}
+
+var initGui = function() {
+    // var controls = new controls();
+    var gui = new dat.GUI();
+    gui.add(controls, 'rotAnglex', -180, 180);
+    gui.add(controls, 'rotAngley', -180, 180);
+    gui.add(controls, 'rotAnglez', -180, 180);
+}
+
+
 //渲染
 function render() {
 
@@ -196,6 +363,7 @@ function render() {
     window.requestAnimFrame(render);
 
     numChange();
+
 }
 
 //开始
@@ -204,7 +372,11 @@ function threeStart() {
     initCamera();
     initScene();
     initLight();
+
+    // initPlane();
     initObject();
+    // initTetrahedrons(tetrParm.pos, tetrParm.length, 4);
+
     render();
     //监听鼠标事件
     renderer.domElement.addEventListener('mousedown', startCube, false);
@@ -226,17 +398,6 @@ function stopCube() {
 }
 
 var lastValue = cubeParams.num;
-
-// function removeCube(total) {
-//     var allChildren = scene.children;
-//     for (let index = 0; index < total; index++) {
-//         var lastObject = allChildren[allChildren.length - 1];
-//         if (lastObject instanceof THREE.Mesh) {
-//             scene.remove(lastObject);
-//             this.numberOfObjects = scene.children.length;
-//         }
-//     }
-// }
 
 function numChange() {
 
@@ -629,3 +790,46 @@ function getIntersects(event) {
         }
     }
 }
+
+//计时，积分模块
+
+function startPoint() {
+    var startPoint = new Data();
+    this.h = today.getHours();
+    this.m = today.getMinutes();
+    this.s = today.getSeconds();
+}
+
+function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    h = checkTime(h)
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('timer').innerHTML = h + ":" + m + ":" + s;
+    setInterval(function() {
+        startTime()
+    }, 1000)
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i
+    }
+}
+
+//数据模块
+
+// function tel(pos) {
+//     console.log(pos.x, pos.y, pos.z);
+// }
+// var qqq = {
+//     x: 2,
+//     y: 1,
+//     z: 3
+// }
+
+// tel(qqq);

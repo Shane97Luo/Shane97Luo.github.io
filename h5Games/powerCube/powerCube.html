@@ -4,9 +4,10 @@
 <head>
     <title>powerCube</title>
 
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <!-- <script src="https://cdn.bootcss.com/three.js/92/three.js"></script> -->
 
-    <script src="./libs./dat.gui.js"></script>
+    <script src="./libs/dat.gui.js"></script>
     <script src="./libs/three.js"></script>
 
     <script src="./libs/OrbitControls.js"></script>
@@ -34,21 +35,77 @@
         <option value="9">九阶</option>
     </select>
 
+    <script>
+        initGui();
+    </script>
     <!-- 魔方样式选择菜单 -->
-    <div id="selTypeCube">
-        <div>常规魔方</div>
-        <div>1*N*N</div>
-        <div>金字塔魔方</div>
-        <div>常规魔方</div>
+
+    <div class="selClassCube">
+        <button class="selMenu1">魔方选项</button>
+        <div class="class1DropMenu">
+            <div class="selNumCube" id="regular">
+                <button class="selMenu2">常规</button>
+                <div class="num">
+                    <a>二阶</a>
+                    <a>三阶</a>
+                    <a>四阶</a>
+                    <a>五阶</a>
+                    <a>六阶</a>
+                </div>
+            </div>
+
+            <div class="selNumCube" id="tetr">
+                <button class="selMenu2">金字塔</button>
+                <div class="num">
+                    <a>二层</a>
+                    <a>三层</a>
+                    <a>四层</a>
+                    <a>五层</a>
+                </div>
+            </div>
+
+            <div class="selNumCube" id="power">
+                <button class="selMenu2">平面</button>
+                <div class="num">
+                    <a>2 * 2</a>
+                    <a>3 * 3</a>
+                    <a>4 * 4</a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="timer">
-        min sec
-    </div>
 
-    <div id="rank">
 
-    </div>
+    <!-- 
+    <ul>
+        <li>
+            <li>reg 1</li>
+            <li>reg 2</li>
+            <li>reg 3</li>
+        </li>
+        <li>
+            <li>pyramid 1</li>
+            <li>pyramid 2</li>
+            <li>pyramid 3</li>
+        </li>
+    </ul> -->
+    <!-- 
+    <div id="scores">
+
+        <span id="timer">
+            min sec    
+        </span>
+        <script>
+            startTime();
+        </script>
+
+        <span id="rank">
+            hekk
+        </span>
+
+    </div> -->
+
 
     <!-- 音效设置 -->
     <!-- <audio id="turn" controls autoplay loop> 

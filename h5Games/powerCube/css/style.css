@@ -3,11 +3,6 @@
     padding: 0;
 }
 
-
-/* body {
-    margin: 20px;
-} */
-
 canvas#mainCanvas {
     /* margin: 20px; */
     padding: 2px;
@@ -27,39 +22,72 @@ select#selNum {
     border-radius: 6px;
 }
 
-div#selTypeCube {
+
+/**
+* @brief 魔方类别及其子类下滑列表选项
+*
+*/
+
+.selClassCube {
     position: absolute;
     left: 20px;
-    top: 130px;
+    top: 120px;
+    /* width: 90px; */
+    height: 35px;
+    cursor: pointer;
+    border: 1px solid blueviolet;
+}
+
+button.selMenu1 {
+    display: inline-block;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.class1DropMenu {
+    display: none;
+}
+
+.selClassCube:hover .class1DropMenu {
+    display: block;
+    /* background-color: chartreuse; */
+}
+
+button.selMenu2 {
+    cursor: pointer;
     width: 80px;
-    height: 40px;
-    background-color: blueviolet;
+    height: 35px;
 }
 
-div#selTypeCube div {
-    width: 100px;
-    height: 40px;
-    background-color: blueviolet;
-    font-size: 25px;
+.selNumCube:hover .num {
+    float: right;
+    display: block;
+    text-align: center;
+    background-color: chocolate;
 }
 
-div#timer {
+.num {
+    margin: 0;
+    padding: 0;
+    display: none;
+}
+
+.num a {
+    margin: 0;
+    padding: 0;
+    display: block;
+    border: 1px solid seagreen;
+    width: 50px;
+    height: 34px;
+    font-size: 20px;
+}
+
+div#scores {
     position: absolute;
     right: 50px;
     top: 130px;
     width: 130px;
-    height: 40px;
-    background-color: rgba(124, 49, 194, 0.89);
-    font-size: 25px;
-    border-radius: 5px;
-}
-
-div#rank {
-    position: absolute;
-    right: 50px;
-    top: 80px;
-    width: 130px;
-    height: 40px;
+    height: 80px;
     background-color: rgba(124, 49, 194, 0.89);
     font-size: 25px;
     border-radius: 5px;

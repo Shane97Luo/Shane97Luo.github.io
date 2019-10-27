@@ -279,8 +279,9 @@ function initTetrahedrons(topPos, length, layerNum) {
 /* 生成单个三棱锥
  * pos: 三棱锥顶点位置{x,y,z}
  * length: 边长
+ * type: 0-mian
  */
-function initRegTetr(pos, length) {
+function initRegTetr(pos, length, type) {
 
     var materialTetrahedron = new THREE.MeshLambertMaterial({
         color: 0xffff00,
@@ -357,13 +358,11 @@ var initGui = function() {
 
 //渲染
 function render() {
-
     renderer.clear();
     renderer.render(scene, camera);
     window.requestAnimFrame(render);
 
     numChange();
-
 }
 
 //开始
@@ -374,8 +373,8 @@ function threeStart() {
     initLight();
 
     // initPlane();
-    initObject();
-    // initTetrahedrons(tetrParm.pos, tetrParm.length, 4);
+    // initObject();
+    initTetrahedrons(tetrParm.pos, tetrParm.length, 4);
 
     render();
     //监听鼠标事件
@@ -400,7 +399,6 @@ function stopCube() {
 var lastValue = cubeParams.num;
 
 function numChange() {
-
     //获取下拉框值
     var obj = document.getElementById('selNum');
     var index = obj.selectedIndex; // 选中索引
@@ -792,7 +790,6 @@ function getIntersects(event) {
 }
 
 //计时，积分模块
-
 function startPoint() {
     var startPoint = new Data();
     this.h = today.getHours();

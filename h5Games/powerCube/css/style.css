@@ -23,12 +23,16 @@ select#selNum {
 }
 
 
+/* select#selNum:hover select {} */
+
+
 /**
 * @brief 魔方类别及其子类下滑列表选项
 *
 */
 
 .selClassCube {
+    /* 位置*/
     position: absolute;
     left: 20px;
     top: 120px;
@@ -57,6 +61,7 @@ button.selMenu2 {
     cursor: pointer;
     width: 80px;
     height: 35px;
+    font-size: 20px;
 }
 
 .selNumCube:hover .num {

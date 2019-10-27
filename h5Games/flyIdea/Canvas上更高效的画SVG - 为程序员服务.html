@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://ju.outofmemory.cn/entry/351006 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="description" content="因为工作的原因，最近开始接触并且了解微信小程序。在使用canvas的时候，遇到一些需要画线条的场景。前期都比较简单，主要是简单线条也规则的圆弧或者扇形，相对
+好画；最近开始出现需要画一些曲线，尤其是比较多需要使用贝塞尔曲线来画。最开始因为精度要求不高还可以接受。当最近的业务场景需要高度还原设计稿的时候，再画下去就
+很复杂了。后来和同事一起研究发现可以通过下面的路径来大大降低绘图难度，这里总结一下：">
+    <meta name="keywords" content=" Canvas上更高效的画SVG">
+    <title>Canvas上更高效的画SVG - 为程序员服务</title>
+    <link href="./Canvas上更高效的画SVG - 为程序员服务_files/17.1.css" type="text/css" rel="stylesheet">
+    
+    <link rel="shortcut icon" href="http://outofmemory.cn/favicon.ico" type="image/x-icon">
+    
+</head>
+<body><div id="BAIDU_DUP_fp_wrapper" style="position: absolute; left: -1px; bottom: -1px; z-index: 0; width: 0px; height: 0px; overflow: hidden; visibility: hidden; display: none;"><iframe id="BAIDU_DUP_fp_iframe" src="./Canvas上更高效的画SVG - 为程序员服务_files/o.html" style="width: 0px; height: 0px; visibility: hidden; display: none;"></iframe></div>
+
+<header class="head">
+<div class="head-left">
+    <div class="logo"><a href="http://outofmemory.cn/">OutOfMemory.CN</a></div>
+    <div class="beta"><sup>β</sup></div>
+    <div class="nav">
+        <ul id="headNav">
+            <li class="current"><a href="http://ju.outofmemory.cn/" title="聚客：编程技术网站牛人牛博聚集地">聚客</a></li>
+            <li><a href="http://outofmemory.cn/code-snippet/" title="代码：分享代码 分享经验">代码</a></li>
+            <li><a href="http://j.outofmemory.cn/" title="技术专栏，精华">专栏</a></li>
+            <li><a href="http://outofmemory.cn/tutorial/" title="简单易学的技术教程">教程</a></li>
+            <li style="width:65px"><a href="http://maven.outofmemory.cn/" title="Maven信息库速查">Maven</a></li>
+            <li><a href="http://outofmemory.cn/github/" title="Github上的中国开源人">Gitter</a></li>
+            <li><a href="http://outofmemory.cn/tag/" title="标签">标签</a></li>
+        </ul>
+    </div>
+</div>
+<div class="head-right">
+<div class="userStatus"><a class="signin" target="_self" href="http://outofmemory.cn/user/login"><i></i><b>登录</b></a><a class="signup" target="_self" href="http://outofmemory.cn/user/register"><i></i><b>注册</b></a></div>
+</div>
+</header>
+
+
+<div class="tgL books"><span>&nbsp;</span>好书：<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgFWEl0QAyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIUBFwdXhQdS0IJRmtFYWBOE0MBQWFyVy4fCHNDaXgoTCllDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVsWBRoEXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBBEOUx5aCltXWwg%3D" target="_blank">重构 改善既有代码的设计</a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgFWEl0QAyJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIUBFwdXhQdS0IJRmtFYWBOE0MBQWFyVy4fCHNDaXgoTCllDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVsWBRoEXStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBBEOUx5aCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B011LPUB42/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B011LPUB42&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]<span class="sep"> | </span><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZTEl4cACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAVweUhcdS0IJRmtvQGoGIFhYfGdieREeXFR5FnhXWClTDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVgcCxsAVStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxQOUBJZCltXWwg%3D" target="_blank">敏捷软件开发原则、模式与实践</a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZTEl4cACJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAVweUhcdS0IJRmtvQGoGIFhYfGdieREeXFR5FnhXWClTDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVgcCxsAVStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxQOUBJZCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B00116MMA8/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B00116MMA8&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]<span class="sep"> | </span><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEw5TH1gcBiJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMbAVEYUhEdS0IJRmtKWhZRLn5bcmd3UwgbMG97VWw2Ujl1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBQGFMXChEDVCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUCxQDVhJfCltXWwg%3D" target="_blank">代码大全（第二版）</a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEw5TH1gcBiJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMbAVEYUhEdS0IJRmtKWhZRLn5bcmd3UwgbMG97VWw2Ujl1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBQGFMXChEDVCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUCxQDVhJfCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B0061XKRXA/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B0061XKRXA&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]<span class="sep"> | </span><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZSHloUBSJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAFAaWhIdS0IJRmtuV1NCDW5FZ2dpHT1jOxR0W09ScgR1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBQGVsUCxEGXCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxUCVBpcCltXWwg%3D" target="_blank">代码整洁之道</a>[<a href="https://www.amazon.cn/gp/product/B0031M9GHC/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B0031M9GHC&amp;linkCode=as2&amp;tag=outofmemorycn-23" target="_blank">亚马逊</a>]<span class="sep"> | </span><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZSGlgXASJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAFQYWRYdS0IJRmtcZW5nT0IYUWBOYUt%2FK05jRgRTUwhlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVgXCxQDUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxUGVhlYCltXWwg%3D" target="_blank">企业应用架构模式</a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZSGlgXASJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAFQYWRYdS0IJRmtcZW5nT0IYUWBOYUt%2FK05jRgRTUwhlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVgXCxQDUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxUGVhlYCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B003LBSRDM/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B003LBSRDM&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]</div><div class="wrap">
+<div class="content"><h1>Canvas上更高效的画SVG</h1>
+<div class="meta">
+    <a href="http://ju.outofmemory.cn/feed/3144/" title="子勰的博客"><i class="ico man"></i>子勰的博客</a>
+    <time><i class="ico date"></i>2018-04-13</time>
+    <span class="pv"><b>2658</b> 阅读</span>
+</div>
+<div class="tags">
+&nbsp;
+</div>
+
+<script type="text/javascript" async="" src="./Canvas上更高效的画SVG - 为程序员服务_files/auto_dup"></script><script src="./Canvas上更高效的画SVG - 为程序员服务_files/hm.js.下载"></script><script async="" src="./Canvas上更高效的画SVG - 为程序员服务_files/analytics.js.下载"></script><script type="text/javascript" async="" src="./Canvas上更高效的画SVG - 为程序员服务_files/zcim"></script><script>
+    function imgError(img){
+        if (typeof img.hasReplaceSrc != 'undefined'){
+            var refer = $('div.author a:last').attr('href');
+            img.src = '/imgr?src=' + encodeURIComponent(img.src) + '&r=' + encodeURIComponent(refer);
+        } else {
+            var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+            for (var i=0;i<img.attributes.length;i++){
+                var attrName = img.attributes[i].nodeName;
+                var attrVal = img.attributes[i].nodeValue;
+                if(attrName.toLowerCase() != 'src' && urlPattern.test(attrVal)){
+                    img.src = attrVal;
+                    img.hasReplaceSrc=true;
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+</script>
+<p>
+ 因为工作的原因，最近开始接触并且了解微信小程序。在使用canvas的时候，遇到一些需要画线条的场景。前期都比较简单，主要是简单线条也规则的圆弧或者扇形，相对好画；最近开始出现需要画一些曲线，尤其是比较多需要使用贝塞尔曲线来画。最开始因为精度要求不高还可以接受。当最近的业务场景需要高度还原设计稿的时候，再画下去就很复杂了。后来和同事一起研究发现可以通过下面的路径来大大降低绘图难度，这里总结一下：
+</p>
+<ul>
+ <li>
+  <p>
+   将设计稿中的线条导出为SVG
+  </p>
+ </li>
+ <li>
+  <p>
+   将SVG代码使用工具转化为Canvas代码
+  </p>
+ </li>
+ <li>
+  <p>
+   基于工具生成的Canvas代码整理为最终的代码
+  </p>
+ </li>
+</ul>
+<p>
+ 接下来结合示例详细介绍一下具体的步骤
+</p>
+<h2>
+ 拿到图片的SVG
+</h2>
+<p>
+ 首先我们去google doc自己随便画一个简单的SVG的图片，如下图：
+</p>
+<p>
+ <img alt="" src="./Canvas上更高效的画SVG - 为程序员服务_files/wx-app-svg-canvas-img.jpg" onerror="return imgError(this)">
+</p>
+<p>
+ 最终我们导出为SVG格式，具体svg的图片资源保存在文章对应开源代码的根目录。
+</p>
+<h2>
+ 使用工具将SVG代码转为Canvas代码
+</h2>
+<p>
+ 由于SVG的语法的固定，目前已经又专门的工具可以讲SVG的代码转化为Canvas对应的代码了，目前个人使用的是基于
+ <code class="highlighter-rouge prettyprint prettyprinted" style=""><span class="pln"> canvg</span><span class="pun">.</span><span class="pln">js </span></code>
+ （
+ <a href="https://github.com/gabelerner/canvg">
+  https://github.com/gabelerner/canvg
+ </a>
+ ）开发的在线工具
+ <code class="highlighter-rouge prettyprint prettyprinted" style=""><span class="pln"> svg2canvas </span></code>
+ 。
+</p>
+<ul>
+ <li>
+  <p>
+   网址：
+   <a rel="nofollow external" href="http://demo.qunee.com/svg2canvas/">
+    http://demo.qunee.com/svg2canvas/
+   </a>
+  </p>
+ </li>
+ <li>
+  <p>
+   截图：
+  </p>
+  <p>
+   <img alt="" src="./Canvas上更高效的画SVG - 为程序员服务_files/wx-app-svg-canvas-screenshot.jpg" onerror="return imgError(this)" style="width: 968px; height: 649px;">
+  </p>
+  <p>
+   页面左边是我们拖入的SVG文件，右侧就是生成的SVG的JS 代码，部分代码如下：
+  </p>
+  <div class="highlighter-rouge">
+   <pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="pln">  </span><span class="kwd">var</span><span class="pln"> </span><span class="typ">SVGIcons</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      </span><span class="str">"zixie.svg"</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+       draw</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">ctx</span><span class="pun">){</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">save</span><span class="pun">();</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">strokeStyle</span><span class="pun">=</span><span class="str">"rgba(0,0,0,0)"</span><span class="pun">;</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">miterLimit</span><span class="pun">=</span><span class="lit">4</span><span class="pun">;</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">font</span><span class="pun">=</span><span class="str">"normal normal 400 normal 15px / 21.4286px ''"</span><span class="pun">;</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">font</span><span class="pun">=</span><span class="str">"   15px "</span><span class="pun">;</span><span class="pln">
+			
+          </span><span class="pun">……</span><span class="pln">
+			
+          ctx</span><span class="pun">.</span><span class="pln">moveTo</span><span class="pun">(</span><span class="lit">258.2251</span><span class="pun">,</span><span class="lit">83.05221</span><span class="pun">);</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">bezierCurveTo</span><span class="pun">(</span><span class="lit">264.7121605</span><span class="pun">,</span><span class="lit">86.9550802</span><span class="pun">,</span><span class="lit">271.30707</span><span class="pun">,</span><span class="lit">90.96817200000001</span><span class="pun">,</span><span class="lit">276.65378</span><span class="pun">,</span><span class="lit">96.334841</span><span class="pun">);</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">fill</span><span class="pun">(</span><span class="str">"evenodd"</span><span class="pun">);</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">stroke</span><span class="pun">();</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">restore</span><span class="pun">();</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">restore</span><span class="pun">();</span><span class="pln">
+          ctx</span><span class="pun">.</span><span class="pln">restore</span><span class="pun">();</span><span class="pln">
+      </span><span class="pun">}</span><span class="pln">
+  </span><span class="pun">}}</span></code></pre>
+  </div>
+ </li>
+</ul>
+<p>
+ 可以看到主体代码已经是绘制Canvas的每一步步骤了。但是里面夹杂了很多文字大小、填充颜色等的设置，而且有些函数，例如
+ <code class="highlighter-rouge prettyprint prettyprinted" style=""><span class="pln"> save </span></code>
+ 和
+ <code class="highlighter-rouge prettyprint prettyprinted" style=""><span class="pln"> restore </span></code>
+ 多处都是重复调用，因此我们并不能直接拿来使用，还需要进行进一步的精简和梳理。
+</p>
+<h2>
+ 整理优化Canvas代码
+</h2>
+<p>
+ 整理优化代码主要分为两个步骤：
+</p>
+<ul>
+ <li>
+  <p>
+   删除重复和无用代码
+  </p>
+ </li>
+ <li>
+  <p>
+   结合业务场景调整代码
+  </p>
+ </li>
+</ul>
+<h3>
+ 删除无用代码
+</h3>
+<p>
+ 这里主要是删除里面大量的字体、颜色等设置、SVG的边框绘制等代码，修改为小程序中的代码，并且在画图前统一设置画笔颜色，同时将里面部分重复代码删除。整理以后的部分代码如下：
+</p>
+<div>
+ <pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="typ">Page</span><span class="pun">({</span><span class="pln">
+  data</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    
+  </span><span class="pun">},</span><span class="pln">
+  onLoad</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">draw</span><span class="pun">()</span><span class="pln">
+  </span><span class="pun">},</span><span class="pln">
+  draw</span><span class="pun">:</span><span class="kwd">function</span><span class="pun">(){</span><span class="pln">
+    </span><span class="kwd">const</span><span class="pln"> ctx </span><span class="pun">=</span><span class="pln"> wx</span><span class="pun">.</span><span class="pln">createCanvasContext</span><span class="pun">(</span><span class="str">'myCanvas'</span><span class="pun">)</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">save</span><span class="pun">();</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">strokeStyle </span><span class="pun">=</span><span class="pln"> </span><span class="str">"blue"</span><span class="pun">;</span><span class="pln">  </span><span class="com">//填充颜色</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">scale</span><span class="pun">(</span><span class="lit">1</span><span class="pun">,</span><span class="lit">1</span><span class="pun">)</span><span class="pln">  </span><span class="com">//缩放比例</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">beginPath</span><span class="pun">();</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">moveTo</span><span class="pun">(</span><span class="lit">33.609554</span><span class="pun">,</span><span class="pln"> </span><span class="lit">92.2973</span><span class="pun">);</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">bezierCurveTo</span><span class="pun">(</span><span class="lit">25.849306000000002</span><span class="pun">,</span><span class="pln"> </span><span class="lit">77.841322</span><span class="pun">,</span><span class="pln"> </span><span class="lit">21.627914000000004</span><span class="pun">,</span><span class="pln"> </span><span class="lit">57.562917000000006</span><span class="pun">,</span><span class="pln"> </span><span class="lit">29.579143000000002</span><span class="pun">,</span><span class="pln"> </span><span class="lit">43.211664000000006</span><span class="pun">);</span><span class="pln">
+   
+	 </span><span class="pun">……</span><span class="pln">		
+	     
+    ctx</span><span class="pun">.</span><span class="pln">moveTo</span><span class="pun">(</span><span class="lit">258.2251</span><span class="pun">,</span><span class="pln"> </span><span class="lit">83.05221</span><span class="pun">);</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">bezierCurveTo</span><span class="pun">(</span><span class="lit">264.7121605</span><span class="pun">,</span><span class="pln"> </span><span class="lit">86.9550802</span><span class="pun">,</span><span class="pln"> </span><span class="lit">271.30707</span><span class="pun">,</span><span class="pln"> </span><span class="lit">90.96817200000001</span><span class="pun">,</span><span class="pln"> </span><span class="lit">276.65378</span><span class="pun">,</span><span class="pln"> </span><span class="lit">96.334841</span><span class="pun">);</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">stroke</span><span class="pun">();</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">restore</span><span class="pun">();</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">draw</span><span class="pun">()</span><span class="pln">
+  </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">})</span></code></pre>
+</div>
+<h3>
+ 结合业务场景调整代码
+</h3>
+<p>
+ 这里主要是结合业务场景对SVG的大小、位置、画笔颜色等做调整。由于是事例，因此对于画笔颜色我没有做调整。仅仅调整了整个SVG的位置，让他右移、下移一定范围。
+</p>
+<p>
+ 如果使用常规方法我们需要逐个去修改里面的函数参数太过费时，我选择了重新实现他的划线函数，在里面对坐标增加偏移量以后再绘图。示例代码如下：
+</p>
+<div>
+ <pre class="prettyprint prettyprinted" style=""><code class="prettyprint"><span class="typ">Page</span><span class="pun">({</span><span class="pln">
+  data</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    indent</span><span class="pun">:</span><span class="lit">50</span><span class="pun">,</span><span class="pln">
+    vIndent</span><span class="pun">:</span><span class="lit">200</span><span class="pun">,</span><span class="pln">
+    canvasContext</span><span class="pun">:</span><span class="kwd">null</span><span class="pln">
+  </span><span class="pun">},</span><span class="pln">
+  onLoad</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">draw</span><span class="pun">()</span><span class="pln">
+  </span><span class="pun">},</span><span class="pln">
+  draw</span><span class="pun">:</span><span class="kwd">function</span><span class="pun">(){</span><span class="pln">
+    onst ctx </span><span class="pun">=</span><span class="pln"> wx</span><span class="pun">.</span><span class="pln">createCanvasContext</span><span class="pun">(</span><span class="str">'myCanvas'</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">setData</span><span class="pun">({</span><span class="pln"> canvasContext</span><span class="pun">:</span><span class="pln"> ctx</span><span class="pun">})</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">save</span><span class="pun">();</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">strokeStyle </span><span class="pun">=</span><span class="pln"> </span><span class="str">"blue"</span><span class="pun">;</span><span class="pln">  </span><span class="com">//填充颜色</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">scale</span><span class="pun">(</span><span class="lit">1</span><span class="pun">,</span><span class="lit">1</span><span class="pun">)</span><span class="pln">  </span><span class="com">//缩放比例</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">setLineWidth</span><span class="pun">(</span><span class="lit">10</span><span class="pun">)</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">beginPath</span><span class="pun">();</span><span class="pln">
+    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">moveTo</span><span class="pun">(</span><span class="lit">33.609554</span><span class="pun">,</span><span class="pln"> </span><span class="lit">92.2973</span><span class="pun">);</span><span class="pln">
+    
+    </span><span class="pun">……</span><span class="pln">
+    
+    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">bezierCurveTo</span><span class="pun">(</span><span class="lit">264.7121605</span><span class="pun">,</span><span class="pln"> </span><span class="lit">86.9550802</span><span class="pun">,</span><span class="pln"> </span><span class="lit">271.30707</span><span class="pun">,</span><span class="pln"> </span><span class="lit">90.96817200000001</span><span class="pun">,</span><span class="pln"> </span><span class="lit">276.65378</span><span class="pun">,</span><span class="pln"> </span><span class="lit">96.334841</span><span class="pun">);</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">stroke</span><span class="pun">();</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">restore</span><span class="pun">();</span><span class="pln">
+    ctx</span><span class="pun">.</span><span class="pln">draw</span><span class="pun">()</span><span class="pln">
+  </span><span class="pun">},</span><span class="pln">
+  moveTo</span><span class="pun">:</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">x</span><span class="pun">,</span><span class="pln">y</span><span class="pun">){</span><span class="pln">
+    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">canvasContext</span><span class="pun">.</span><span class="pln">moveTo</span><span class="pun">(</span><span class="pln">x </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">indent</span><span class="pun">,</span><span class="pln"> y </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">vIndent</span><span class="pun">);</span><span class="pln">
+  </span><span class="pun">},</span><span class="pln"> 
+  bezierCurveTo</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">(</span><span class="pln">x</span><span class="pun">,</span><span class="pln"> y</span><span class="pun">,</span><span class="pln"> x1</span><span class="pun">,</span><span class="pln"> y1</span><span class="pun">,</span><span class="pln"> x2</span><span class="pun">,</span><span class="pln"> y2</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">canvasContext</span><span class="pun">.</span><span class="pln">bezierCurveTo</span><span class="pun">(</span><span class="pln">
+      x  </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">indent</span><span class="pun">,</span><span class="pln"> y  </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">vIndent</span><span class="pun">,</span><span class="pln"> 
+      x1 </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">indent</span><span class="pun">,</span><span class="pln"> y1 </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">vIndent</span><span class="pun">,</span><span class="pln"> 
+      x2 </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">indent</span><span class="pun">,</span><span class="pln"> y2 </span><span class="pun">+</span><span class="pln"> </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">data</span><span class="pun">.</span><span class="pln">vIndent</span><span class="pun">);</span><span class="pln">
+  </span><span class="pun">},</span><span class="pln"> 
+</span><span class="pun">})</span></code></pre>
+</div>
+<p>
+ 至此我们就完成了图片到Canvas的转化，最终效果截图如下：
+</p>
+<p>
+ <img alt="" src="./Canvas上更高效的画SVG - 为程序员服务_files/wx-app-svg-canvas-result-screenshot.jpg" onerror="return imgError(this)">
+</p>
+<h2>
+ 相关资源：
+</h2>
+<p>
+ OK，至此我们就实现了在微信小程序中使用SVG资源。文章中涉及到的所有代码已经开源到github，相关链接如下：
+</p>
+<ul>
+ <li>
+  <p>
+   github:
+  </p>
+  <ul>
+   <li>
+    <p>
+     http:
+     <a href="https://github.com/bihe0832/wx-app/tree/master/canvas-demo">
+      https://github.com/bihe0832/wx-app/tree/master/canvas-demo
+     </a>
+    </p>
+   </li>
+   <li>
+    <p>
+     git:
+     <code class="highlighter-rouge prettyprint prettyprinted" style=""><span class="pln"> https</span><span class="pun">:</span><span class="com">//github.com/bihe0832/wx-app.git </span></code>
+    </p>
+   </li>
+  </ul>
+ </li>
+ <li>
+  <p>
+   小程序代码片段（可以直接使用小程序开发工具导入）：
+  </p>
+  <ul>
+   <li>
+    <code class="highlighter-rouge prettyprint prettyprinted" style=""><span class="pln"> wechatide</span><span class="pun">:</span><span class="com">//minicode/6OzE4Dmw6qYh </span></code>
+   </li>
+  </ul>
+ </li>
+</ul>
+<div class="like">
+    <a href="javascript:void(0)" class="assertLogin" rel="nofollow" target="_self">点赞</a>
+</div>
+<div class="tags">
+&nbsp;
+</div>
+
+<div class="author">
+    <span class="name">作者：<a href="http://ju.outofmemory.cn/feed/3144/" title="子勰的博客">子勰的博客</a></span>
+    <div class="authorAvatar">
+        <a href="http://ju.outofmemory.cn/feed/3144/">
+            <img width="128" align="center" valign="absmiddle" src="./Canvas上更高效的画SVG - 为程序员服务_files/3144.png" alt="子勰的博客">
+        </a>
+    </div>
+    <div class="small">
+        屌丝程序猿，鸡血攻城狮；努力学技术，潜心做精品！
+    </div>
+    <div class="small">原文地址：<a rel="nofollow external" target="_blank" href="http://blog.bihe0832.com/svg-canvas.html">Canvas上更高效的画SVG</a>, 感谢原作者分享。</div>
+</div>
+
+<div class="pn">
+    <span class="next"><mark>→</mark><a href="http://ju.outofmemory.cn/entry/351674">开发中常用的文档管理、云端笔记等效率工具介绍</a></span>
+    <span class="pre"><mark>←</mark><a href="http://ju.outofmemory.cn/entry/350361">旅行出行前准备列表</a></span>
+</div>
+<div class="tgBD" style="width: 968px; text-align: center; overflow: hidden; border: 1px solid transparent; border-radius: 2px;">
+<script type="text/javascript">
+
+var cpro_id = "u2080713"
+</script>
+<script src="./Canvas上更高效的画SVG - 为程序员服务_files/cm.js.下载" type="text/javascript"></script><div id="BAIDU_SSP__wrapper_u2080713_0"><div style="box-sizing: content-box;width:1366px;height:137px;position:relative;margin:0 auto;"><iframe id="iframeu2080713_0" name="iframeu2080713_0" src="./Canvas上更高效的画SVG - 为程序员服务_files/zcim.html" width="1366" height="137" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:1366px;height:137px" allowtransparency="true"></iframe></div></div>
+</div>
+
+<div class="comments">
+<a name="comments"></a>
+</div>
+
+
+
+
+
+
+</div>
+<div class="sidebar">
+    <div class="tgSide booksNail"><div class="cTitle">好书推荐</div><div><ul><li><div class="nail"><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZSHloUBSJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAFAaWhIdS0IJRmtuV1NCDW5FZ2dpHT1jOxR0W09ScgR1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBQGVsUCxEGXCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxUCVBpcCltXWwg%3D" target="_blank"><img src="./Canvas上更高效的画SVG - 为程序员服务_files/code-clean.jpg"></a></div><div class="title"><a class="bookName" href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZSHloUBSJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAFAaWhIdS0IJRmtuV1NCDW5FZ2dpHT1jOxR0W09ScgR1Dh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBQGVsUCxEGXCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxUCVBpcCltXWwg%3D" target="_blank"><nobr>代码整洁之道</nobr></a>[<a href="https://www.amazon.cn/gp/product/B0031M9GHC/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B0031M9GHC&amp;linkCode=as2&amp;tag=outofmemorycn-23" target="_blank">亚马逊</a>]</div></li><li><div class="nail"><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZSGlgXASJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAFQYWRYdS0IJRmtcZW5nT0IYUWBOYUt%2FK05jRgRTUwhlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVgXCxQDUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxUGVhlYCltXWwg%3D" target="_blank"><img src="./Canvas上更高效的画SVG - 为程序员服务_files/business-architecture-pattern.jpg"></a></div><div class="title"><a class="bookName" href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZSGlgXASJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAFQYWRYdS0IJRmtcZW5nT0IYUWBOYUt%2FK05jRgRTUwhlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVgXCxQDUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxUGVhlYCltXWwg%3D" target="_blank"><nobr>企业应用架构模式</nobr></a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwZSGlgXASJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMTAFQYWRYdS0IJRmtcZW5nT0IYUWBOYUt%2FK05jRgRTUwhlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUBheEAMUAFwrWxAKEgJQHVgXCxQDUCtcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAxUGVhlYCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B003LBSRDM/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B003LBSRDM&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]</div></li><li><div class="nail"><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwdUGlgXBSJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMSBlQYWRIdS0IJRmtGBW1OHk5ac2IXYS8cLX1bYkcPXgFlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRHFwTAhcOUytcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAhMGVhlcCltXWwg%3D" target="_blank"><img src="./Canvas上更高效的画SVG - 为程序员服务_files/head-first-design-pattern.jpg"></a></div><div class="title"><a class="bookName" href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwdUGlgXBSJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMSBlQYWRIdS0IJRmtGBW1OHk5ac2IXYS8cLX1bYkcPXgFlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRHFwTAhcOUytcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAhMGVhlcCltXWwg%3D" target="_blank"><nobr>Head&nbsp;First设计模式</nobr></a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEwdUGlgXBSJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQMSBlQYWRIdS0IJRmtGBW1OHk5ac2IXYS8cLX1bYkcPXgFlDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRHFwTAhcOUytcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsUAhMGVhlcCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B0011FBU34/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B0011FBU34&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]</div></li><li><div class="nail"><a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgBQGF8WCiJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIVAlYfWB0dS0IJRmsddntuCRIvcGJLeSJJBmhEd25XbDxDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRHVIWAREGVStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBRcEURhTCltXWwg%3D" target="_blank"><img src="./Canvas上更高效的画SVG - 为程序员服务_files/program-essense.jpg"></a></div><div class="title"><a class="bookName" href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgBQGF8WCiJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIVAlYfWB0dS0IJRmsddntuCRIvcGJLeSJJBmhEd25XbDxDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRHVIWAREGVStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBRcEURhTCltXWwg%3D" target="_blank"><nobr>编程珠玑（续 修订版）</nobr></a>[<a href="http://union-click.jd.com/jdc?e=0&amp;p=AyIHZR5aEQISA1AYUyUCEgBQGF8WCiJDCkMFSjJLQhBaUAscSkIBR0ROVw1VC0dFFQIVAlYfWB0dS0IJRmsddntuCRIvcGJLeSJJBmhEd25XbDxDDh43UxhZHQQRBVIZaxUDEwZUElsUBxA3ZRtaJVB83%2BOtg7CzDtP%2FlI6dlSIBUB9fHQEQAFwrWxAKEgBRHVIWAREGVStcJVlHaVMbXkAGRgcASAlBAkA3ZStr&amp;t=W1dCFBBFC1pXUwkEAEAdQFkJBVsVBRcEURhTCltXWwg%3D" target="_blank">京东</a> &nbsp; <a href="https://www.amazon.cn/gp/product/B0150BMQDM/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&amp;camp=536&amp;creative=3200&amp;creativeASIN=B0150BMQDM&amp;linkCode=as2&amp;tag=oucn-23" target="_blank">亚马逊</a>]</div></li></ul></div></div><div class="similar entry">
+    <span class="title">您可能感兴趣的博客</span>
+    <div><ul class="similarEntries">
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/2838/" title="小强">小强</a> 发表 <span class="time" title="2011-12-21 06:34:26">7年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/375005" class="codeTitle">Xcode4 作战效率提升手册</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/4886/" title="博主">博主</a> 发表 <span class="time" title="2018-10-27 00:00:00">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/375002" class="codeTitle">空洞骑士</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/637/" title="victor">victor</a> 发表 <span class="time" title="2018-10-26 10:00:40">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/375001" class="codeTitle">odoo 12 更改端口8069 到80的解决方法</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/637/" title="victor">victor</a> 发表 <span class="time" title="2018-10-27 06:56:55">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/375000" class="codeTitle">装 wkhtmltopdf 中文乱码或者空白解决方法</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/637/" title="victor">victor</a> 发表 <span class="time" title="2018-10-27 07:18:19">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/374999" class="codeTitle">Odoo 12 PDF不显示中文字体</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/3728/" title="白翼">白翼</a> 发表 <span class="time" title="2018-10-26 01:53:26">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/374998" class="codeTitle">WordPress / NGINX HTTP Response Splitting</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/203/" title="Joker.Liang">Joker.Liang</a> 发表 <span class="time" title="2018-10-26 02:50:20">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/374997" class="codeTitle">2步解决window10下启动VMware Workstation虚拟机 时“与Device/Cre</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/4519/" title="狂明小妖">狂明小妖</a> 发表 <span class="time" title="2018-10-27 04:38:32">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/374996" class="codeTitle">抖音视频被限流了怎么解除</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/2255/" title="snoopyxdy">snoopyxdy</a> 发表 <span class="time" title="2012-10-24 12:08:50">7年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/374995" class="codeTitle">node.js中normalize引出的坑</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/1746/" title="明月浩空">明月浩空</a> 发表 <span class="time" title="2018-10-26 10:38:23">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/374994" class="codeTitle">安装macOS Clover boot0af：error，boot0SS：error，boot0：e</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/1837/" title="博主">博主</a> 发表 <span class="time" title="2018-10-27 17:36:48">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/374993" class="codeTitle">Class written in Swift</a>
+</li>
+    <li><span class="meta"><a href="http://ju.outofmemory.cn/feed/2598/" title="麻凯倩">麻凯倩</a> 发表 <span class="time" title="2018-10-26 05:57:08">1年前</span></span>
+<a href="http://ju.outofmemory.cn/entry/374992" class="codeTitle">Ghost 账户被锁定问题（Mysql数据库）</a>
+</li>
+</ul>
+</div>
+</div>
+
+
+
+
+    <div class="tgSide"><script type="text/javascript">var jd_union_unid="1000081043",jd_ad_ids="512:6",jd_union_pid="CKvGvfKzKxCTjfDcAxoAIMH+guICKgA=";var jd_width=336;var jd_height=280;var jd_union_euid="";var p="BBcEUB5aEwUbNwpfBkgyTUMIRmtKRk9aZV8ETVxNNwpfBkgyeWcXBSJifWVlDFMYfkNLDwxmRRwAYgtZK10WABoBVhlcFzISBlQaWhwCEwJXK2tKRk9aZVA1FDJNQwhGaxUHGgdXE1MUBxIOVxxrFDIiNw%3D%3D";</script><script type="text/javascript" charset="utf-8" src="./Canvas上更高效的画SVG - 为程序员服务_files/auto.js.下载"></script><div style="position: relative; width: 336px; height: 280px;"><iframe scrolling="no" frameborder="0" width="336" height="280" src="./Canvas上更高效的画SVG - 为程序员服务_files/auto.html"></iframe><div style="position: absolute; top: 1px; right: 0px; background: url(&quot;//img1.360buyimg.com/da/jfs/t2404/310/2196729438/1126/702d4c79/56a598b6N82664dfc.png&quot;); height: 20px; width: 20px;"></div></div></div>
+    <div class="similar code">
+    <span class="title">您可能感兴趣的代码</span>
+    <div><ul class="similarCodes">
+    <li><span class="time" title="2019-06-17 21:18:10">4月前</span><a href="http://outofmemory.cn/code-snippet/92557/PHP-jQuery-photoClip-javascript-picture-caijian-upload-example">PHP+jQuery.photoClip.js图片裁剪上传实例</a> by <a href="http://outofmemory.cn/user/61987">素材火官网</a>
+</li>
+    <li><span class="time" title="2019-05-14 11:38:29">5月前</span><a href="http://outofmemory.cn/code-snippet/92556/PHP-MySQL-yonghuzhuce-send-email-jihuo-zhanghao-example">PHP+MySQL用户注册发送邮件激活账号实例</a> by <a href="http://outofmemory.cn/user/67799">好小灰灰</a>
+</li>
+    <li><span class="time" title="2019-05-02 16:50:10">5月前</span><a href="http://outofmemory.cn/code-snippet/92555/www.baidu.com">test</a> by <a href="http://outofmemory.cn/user/68190">小蠢驴丶</a>
+</li>
+    <li><span class="time" title="2019-04-03 17:11:34">6月前</span><a href="http://outofmemory.cn/code-snippet/92554/duoduo-ke-publish-30-0-alpha-3-opensource-release-support-weixin-baidu-zhifubao-xiao-program">多多客发布 3.0.0-alpha.3 开源版，支持微信、百度、支付宝小程序</a> by <a href="http://outofmemory.cn/user/68168">青否科技</a>
+</li>
+    <li><span class="time" title="2019-02-21 11:47:08">8月前</span><a href="http://outofmemory.cn/code-snippet/92553/Thinkphp5-zhenghe-weixin-saoma-payment-example">Thinkphp5整合微信扫码支付实例</a> by <a href="http://outofmemory.cn/user/67799">好小灰灰</a>
+</li>
+    <li><span class="time" title="2019-02-13 14:14:06">8月前</span><a href="http://outofmemory.cn/code-snippet/92523/Java-purpose-exist-naxie">Java的用途有哪些？</a> by <a href="http://outofmemory.cn/user/63695">edulofter</a>
+</li>
+    <li><span class="time" title="2018-12-26 11:42:30">10月前</span><a href="http://outofmemory.cn/code-snippet/85982/java-B2B2C-springmvc-mybatis-fang-taobao-dianzishangcheng-system-zhenghe-qiye-jiagou-technology-poi">java B2B2C springmvc mybatis仿淘宝电子商城系统-整合企业架构的技术点</a> by <a href="http://outofmemory.cn/user/67746">it绿萝</a>
+</li>
+    <li><span class="time" title="2018-12-26 11:40:17">10月前</span><a href="http://outofmemory.cn/code-snippet/85981/java-B2B2C-springmvc-mybatis-dianzishangwu-platform-sourcecode-commonservice-config-configuration">java B2B2C springmvc mybatis电子商务平台源码 - commonservice-config配置服务搭建</a> by <a href="http://outofmemory.cn/user/67746">it绿萝</a>
+</li>
+    <li><span class="time" title="2018-12-26 11:37:38">10月前</span><a href="http://outofmemory.cn/code-snippet/85980/java-B2B2C-Springboot-dianzishangwu-platform-sourcecode-eureka-jiqun-zhenghe-config-configuration-c">java B2B2C Springboot电子商务平台源码 -eureka集群整合config配置中心</a> by <a href="http://outofmemory.cn/user/67746">it绿萝</a>
+</li>
+    <li><span class="time" title="2018-12-26 11:34:35">10月前</span><a href="http://outofmemory.cn/code-snippet/85979/java-B2B2C-Springcloud-dianzishangwu-platform-sourcecode-security-jiandan-usage">java B2B2C Springcloud电子商务平台源码-security简单使用</a> by <a href="http://outofmemory.cn/user/67746">it绿萝</a>
+</li>
+    <li><span class="time" title="2018-12-26 11:32:48">10月前</span><a href="http://outofmemory.cn/code-snippet/85978/java-B2B2C-sourcecode-dianzishangwu-platform-SpringCloud-zhenghe-Hystrix">java B2B2C源码电子商务平台 -SpringCloud整合Hystrix</a> by <a href="http://outofmemory.cn/user/67746">it绿萝</a>
+</li>
+    <li><span class="time" title="2018-12-25 14:38:09">10月前</span><a href="http://outofmemory.cn/code-snippet/85977/JAVA-springboot-ssm-b2b2c-duoyonghu-shangcheng-system-sourcecode-SSO-dandian-denglu-OAuth2-0-denglu">JAVA springboot ssm b2b2c多用户商城系统源码-SSO单点登录之OAuth2.0登录流程(2)</a> by <a href="http://outofmemory.cn/user/67746">it绿萝</a>
+</li>
+</ul>
+</div>
+</div>
+
+
+
+    
+    
+    
+    
+</div>
+
+
+</div>
+<script src="./Canvas上更高效的画SVG - 为程序员服务_files/jquery-1.11.3.min.js.下载"></script>
+<script>var isMobile= $('.sidebar').css('clear') == 'both';</script>
+<script src="./Canvas上更高效的画SVG - 为程序员服务_files/loginUser_v5" charset="utf-8"></script>
+<script src="./Canvas上更高效的画SVG - 为程序员服务_files/prettify.js.下载" type="text/javascript"></script>
+<script src="./Canvas上更高效的画SVG - 为程序员服务_files/5.js.下载"></script>
+<script>
+    var removeAD=false;
+    var voteTargetType='entry';var voteTargetId =351006;
+    var voting=false;
+    function onGetVoteStatus(status){
+        if(status.type != 0){
+            voting=true;
+            $('.like a').html('0赞');
+        }
+    }
+    $('.like a').click(function(){
+        if (!voting){
+            voting = true;
+            $.post("/"+voteTargetType+"/"+voteTargetId+"/vote", { type: '1'},
+            function (response, textStatus){
+                if(!response.success){
+                    alert(response.message);
+                } else {
+                    $('.like a').html((response.upCount||1) + '赞');
+                }
+            }, "json");
+        } else {
+            $('.like a').html('已赞');
+        }
+    });
+    $('pre,code').removeClass('prettyprint').addClass('prettyprint');
+    prettyPrint();
+    function displayPv(pv){
+        $('.pv b').html(pv + '');
+    }
+    function resizeImg(o,maxWidth) {
+        var img = $(o);
+        if(img.width() > maxWidth) {
+            var h = Math.round(maxWidth / img.width() * img.height());
+            img.width(maxWidth).height(h);
+        }
+    }
+    function resizeImgs(){
+        var maxWidth = $('div.author').width();
+        $('.content img').each(
+            function(i,o){resizeImg(o,maxWidth);}
+        );
+        var tg = $('.tgBD');
+        if(tg.width()>maxWidth){
+            tg.width(maxWidth+'px').css({'text-align':'center','overflow':'hidden',border:'1px solid transparent','border-radius':'2px','-moz-border-radius':'2px'});
+        }
+    }
+    $(resizeImgs);
+    $(window).resize(resizeImgs);
+    function showBooks(books) {
+        var h = '<div class="tgL books"><span>&nbsp;</span>好书：';
+        var maxCount = 5;
+        var lineCn = books.length>maxCount?maxCount:books.length;
+        function getProvidersHtml(b) {
+            var h='';
+            if (b.providers) {
+                h += '[';
+                var first = true;
+                for (var p in b.providers) {
+                    var pUrl = b.providers[p]['url'];
+                    
+                    if (first) {
+                        first = false;
+                    } else {
+                        h += ' &nbsp; ';
+                    }
+                    h += ('<a href="' + pUrl +'" target="_blank">' + p +  '</a>');
+                    
+                }
+                h += ']';
+            }
+            return h;
+        }
+
+        for (var i=0; i<lineCn;i++) {
+            if (i>0) h += '<span class="sep"> | </span>';
+            var book = books[i];
+            h += ('<a href="'+ book.url +'" target="_blank">' + book.title + '</a>');
+            h += getProvidersHtml(book);
+        }
+
+
+        h += '</div>';
+        $(h).insertBefore($('div.wrap'));
+
+        var rightHtml = '<div class="tgSide booksNail"><div class="cTitle">好书推荐</div>';
+        rightHtml += '<div><ul>';
+        var startIdx = books.length > 4 ? books.length-4 : 0;
+        for (var i=startIdx; i<books.length;i++) {
+            var book = books[i];
+            rightHtml += ('<li><div class="nail"><a href="' + book.url + '" target="_blank"><img src="//outofmemory.cn/static/book/' + book.image + '" /></a></div>');
+            rightHtml += ('<div class="title"><a class="bookName" href="'+book.url+'" target="_blank"><nobr>'+book.title+ '</nobr></a>');
+            var providerH = getProvidersHtml(book);
+            rightHtml += providerH;
+            rightHtml += '</div></li>';
+        }
+        rightHtml += '</ul></div>';
+        rightHtml += '</div>';
+
+        $(rightHtml).insertBefore($('div.sidebar div:first'))
+    }
+</script>
+<script src="./Canvas上更高效的画SVG - 为程序员服务_files/list" type="text/javascript"></script>
+
+
+<footer class="foot">
+© 2015 <a href="http://outofmemory.cn/">内存溢出</a>
+</footer>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-36036446-1', 'outofmemory.cn');
+    ga('send', 'pageview');
+    ga('set',  '&uid', window.loginUser.id); // 使用已登录的 user_id 来设置用户 ID。
+</script>
+
+<div class="bdtj"><script type="text/javascript">
+
+
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?2051de3619785a7bff6213250ea9fbbd";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</div>
+<script>
+    function displayTG(k, h){
+        var display = typeof removeAD != 'undefined' && !removeAD;
+        if (!display) {
+            return;
+        }
+        if(k == 'jukeTopLine'){
+            $(h).insertBefore($('div.wrap'));
+        }
+    }
+    if(parseInt($('.content').css('marginRight')) > 50){
+        var contentHeight=$('.content').height();var sideHeight=$('.sidebar').height();
+        if(contentHeight<sideHeight) $('.content').css({'minHeight':sideHeight+'px'});
+    }
+</script>
+
+
+<div class="codeTools" style="left: 908px; top: 1944.53px;"><div id="copyCode">复制代码</div><div id="saveCode">保存代码</div><div id="runCode" style="display: none;">试试效果</div></div><div style="position: absolute; left: 914px; top: 1953px; width: 64px; height: 12px; z-index: 99;"><embed id="ZeroClipboardMovie_1" src="/static/clipboard/ZeroClipboard10.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="64" height="12" name="ZeroClipboardMovie_1" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=64&amp;height=12" wmode="transparent"></div></body></html>

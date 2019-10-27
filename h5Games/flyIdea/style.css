@@ -1,0 +1,15 @@
+canvas#canvas {
+    border: 1px blue solid;
+    position: absolute;
+    top: 20;
+    left: 20;
+    z-index: 2;
+}
+
+canvas#canvas1 {
+    border: 1px brown solid;
+    position: absolute;
+    top: 20;
+    left: 20;
+    z-index: 1;
+}

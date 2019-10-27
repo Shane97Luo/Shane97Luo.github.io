@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>fly Idea</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <!-- 总视图 -->
+    <div class="mainview">
+
+        <!-- 未定义区域 -->
+        <div class="defalut"></div>
+
+        <!-- 画板区域 -->
+        <div class="painting-area" id="paint_area">
+            <!-- 绘图区域 -->
+            <canvas id="canvas" width="500" height="500"></canvas>
+            <canvas id="canvas1" width="810" height="510"></canvas>
+
+            <!-- 图层管理 -->
+            <div class="canvas-manage"></div>
+        </div>
+
+        <!-- 工具条 -->
+        <div class="tool-area"></div>
+
+        <!-- 默认图形 基本几何图形  事物图形 -->
+
+    </div>
+
+    <!-- <script type="text/javascript">
+        let isDown = false;
+        let beginPoint = null;
+        const canvas = document.querySelector('#canvas');
+        const ctx = canvas.getContext('2d');
+
+        // 设置线条颜色
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 1;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+
+        canvas.addEventListener('mousedown', down, false);
+        canvas.addEventListener('mousemove', move, false);
+        canvas.addEventListener('mouseup', up, false);
+        canvas.addEventListener('mouseout', up, false);
+
+        function down(evt) {
+            isDown = true;
+            beginPoint = getPos(evt);
+        }
+
+        function move(evt) {
+            if (!isDown) return;
+            const endPoint = getPos(evt);
+            drawLine(beginPoint, endPoint);
+            beginPoint = endPoint;
+        }
+
+        function up(evt) {
+            if (!isDown) return;
+
+            const endPoint = getPos(evt);
+            drawLine(beginPoint, endPoint);
+
+            beginPoint = null;
+            isDown = false;
+        }
+
+        function getPos(evt) {
+            return {
+                x: evt.clientX,
+                y: evt.clientY
+            }
+        }
+
+        function drawLine(beginPoint, endPoint) {
+            ctx.beginPath();
+            ctx.moveTo(beginPoint.x, beginPoint.y);
+            ctx.lineTo(endPoint.x, endPoint.y);
+            ctx.stroke();
+            ctx.closePath();
+        }
+    </script> -->
+
+    <script src="./main.js"></script>
+</body>
+
+</html>

@@ -1,3 +1,8 @@
+div#mainview {
+    width: 80%;
+    height: 80%;
+}
+
 canvas#canvas {
     border: 1px blue solid;
     position: absolute;

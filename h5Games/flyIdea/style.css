@@ -4,22 +4,39 @@
 }
 
 div#mainview {
-    /* width: 100%; */
-    height: 600px;
+    width: 100%;
+    /* height: 600px; */
     border: 2px solid teal;
     background-color: cadetblue;
 }
 
 div#tools {
-    height: 100px;
+    /* float: left; */
+    position: absolute;
+    top: 60px;
+    left: 10px;
+    height: 400px;
+    width: 50px;
     border: 1px solid rgb(11, 190, 122);
     background-color: bisque;
 }
 
 div#paintingArea {
+    float: left;
     height: 200px;
     border: 1px solid seagreen;
     background-color: blueviolet;
+}
+
+div#canvasManagement {
+    /* float: right; */
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    height: 400px;
+    width: 50px;
+    border: 1px solid seagreen;
+    background-color: rgb(22, 96, 165);
 }
 
 .canvas {

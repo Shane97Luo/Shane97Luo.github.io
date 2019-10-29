@@ -1,12 +1,20 @@
-// var param
+/** 主要由以下几个模块
+ * 1 通用模块，包括选择，变形，尺子，几何图形
+ * 2 工具模块，提供几种笔，橡皮擦，等工具
+ * 3 图层模块，管理图层，增删，背景色等 
+ * 4 色盘模块，颜色选择，最好能提供同胞色，使用颜色保存等
+ * 5 文件模块，保存新建文件，撤销，恢复动作。
+ */
+
+
 
 let isDown = false;
 let points = []; //获取点
 let beginPoint = null; //起点
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth * 0.8;
-canvas.height = window.innerHeight * 0.7;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 function setLine(params) {
     this.strokeStyle = 'red';
@@ -26,6 +34,13 @@ canvas.addEventListener('mousedown', down, false);
 canvas.addEventListener('mousemove', move, false);
 canvas.addEventListener('mouseup', up, false);
 canvas.addEventListener('mouseout', up, false);
+
+window.addEventListener('resize', onResize, false);
+
+function onResize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
 
 function down(evt) {
     isDown = true;

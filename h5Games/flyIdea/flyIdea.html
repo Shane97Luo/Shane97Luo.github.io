@@ -3,7 +3,7 @@
 
 <head>
     <title>fly Idea</title>
-
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.common.dev.js"></script>
     <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -12,13 +12,18 @@
     <!-- 总视图 -->
     <div id="mainview">
 
-        <!-- 未定义区域 -->
+        <!-- 通用区域 -->
+        <div id="universal"></div>
+
+        <!-- 工具区域 -->
         <div id="tools">
+            <p>工具</p>
             <!-- <p>未定义区域</p> -->
         </div>
 
         <!-- 画板区域 -->
         <div id="paintingArea">
+            <p>画板</p>
             <!-- 绘图区域 -->
             <!-- <p>画板</p> -->
             <canvas id="canvas" class="canvas"></canvas>
@@ -26,9 +31,9 @@
         </div>
 
         <!-- 图层管理 -->
-        <!-- <div id="canvas-management">
+        <div id="canvasManagement">
             <p>涂层</p>
-        </div> -->
+        </div>
     </div>
 
     <!-- 默认图形 基本几何图形  事物图形 -->

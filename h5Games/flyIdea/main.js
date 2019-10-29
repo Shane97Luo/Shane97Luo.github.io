@@ -1,8 +1,20 @@
+// var param
+
 let isDown = false;
-let points = [];
-let beginPoint = null;
+let points = []; //获取点
+let beginPoint = null; //起点
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth * 0.8;
+canvas.height = window.innerHeight * 0.7;
+
+function setLine(params) {
+    this.strokeStyle = 'red';
+    this.lineWidth = 1;
+    this.lineJoin = 'round';
+    this.lineCap = 'round';
+
+}
 
 // 设置线条颜色
 ctx.strokeStyle = 'red';
@@ -79,8 +91,12 @@ function up(evt) {
 
 function getPos(evt) {
     return {
-        x: evt.clientX,
-        y: evt.clientY
+        x: evt.offsetX == undefined ? evt.layerX : evt.offsetX,
+        y: evt.offsetY == undefined ? evt.layerY : evt.offsetY
+
+        //// 相对于浏览器窗口
+        // x: evt.clientX, 
+        // y: evt.clientY
     }
 }
 
@@ -92,19 +108,10 @@ function drawLine(beginPoint, controlPoint, endPoint) {
     ctx.closePath();
 }
 
+var cvs = document.getElementById("canvas");
+// cvs.width = window.innerWidth;
+// cvs.hight = window.innerHeight;
 
-var cvs1 = document.getElementById("canvas1");
-ctext1 = cvs1.getContext('2d');
-ctext1.strokeStyle = 'red';
-ctext1.lineWidth = 5;
-ctext1.lineJoin = 'round';
-ctext1.lineCap = 'round';
-
-ctext1.moveTo(0, 0);
-ctext1.lineTo(200, 100);
-ctext1.stroke();
-
-var cvs = document.getElementById("canvas1");
 ctext = cvs.getContext('2d');
 ctext.strokeStyle = 'red';
 ctext.lineWidth = 5;
@@ -117,13 +124,9 @@ ctext.stroke();
 
 var id = 3;
 
-function addCanvas() {
-    // var canvas = document.createElement("canvas#canvas1");
-    // canvas.appendChild();
-    // var paint_area = document.getElementById('paint_area');
-    // paint_area.innerHTML += '<canvas id="csd"></canvas>';
-    // paint_area.innerHTML += '<div>任务仍然</div>';
-}
+// function addCanvas() {
+
+// }
 // addCanvas();
 
 // 存储画板 

@@ -1,20 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 div#mainview {
-    width: 80%;
-    height: 80%;
+    /* width: 100%; */
+    height: 600px;
+    border: 2px solid teal;
+    background-color: cadetblue;
 }
 
-canvas#canvas {
-    border: 1px blue solid;
-    position: absolute;
-    top: 20;
-    left: 20;
-    z-index: 2;
+div#tools {
+    height: 100px;
+    border: 1px solid rgb(11, 190, 122);
+    background-color: bisque;
 }
 
-canvas#canvas1 {
-    border: 1px brown solid;
-    position: absolute;
-    top: 20;
-    left: 20;
-    z-index: 1;
+div#paintingArea {
+    height: 200px;
+    border: 1px solid seagreen;
+    background-color: blueviolet;
+}
+
+.canvas {
+    background-color: crimson;
 }

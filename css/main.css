@@ -8,6 +8,11 @@
         border: solid 2px rebeccapurple;
     }
     
+    body {
+        margin: 2px orange;
+        padding: 3px yellow;
+    }
+    
     nav#banner {
         border: 2px solid saddlebrown;
     }
@@ -31,9 +36,11 @@
     div.infoPlate {
         /* color: aqua; */
         background-color: brown;
-        width: 50%;
+        width: 45%;
         height: 200px;
         float: left;
+        /* margin: 2px green; */
+        /* padding: 2px green; */
     }
     
     div.splitLine {
@@ -64,4 +71,8 @@
         body {
             background-color: rgb(20, 107, 220);
         }
+    }
+    
+    image {
+        color: red;
     }

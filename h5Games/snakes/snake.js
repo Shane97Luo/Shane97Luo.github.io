@@ -166,28 +166,33 @@ document.onkeydown = function(event) {
     var e = event || window.event || arguments.callee.caller.arguments[0];
 
     console.log(snakeStatus);
-    if (e && e.keyCode == 37 && snakeStatus != "right") { // 按left要做的事情
-        snakeOffset = offset.left;
-        snakeStatus = "left";
-        console.log(snakeStatus);
+    if (e && e.keyCode == 37) { // 按left要做的事情
+        if (snakeStatus != "right") {
+            snakeOffset = offset.left;
+            snakeStatus = "left";
+            console.log(snakeStatus);
+        }
     }
-    if (e && e.keyCode == 38 && snakeStatus != "down") { // 按 up要做的事情
-        snakeOffset = offset.up;
-        snakeStatus = "up";
-        console.log(snakeStatus);
-
+    if (e && e.keyCode == 38) { // 按 up要做的事情
+        if (snakeStatus != "down") {
+            snakeOffset = offset.up;
+            snakeStatus = "up";
+            console.log(snakeStatus);
+        }
     }
-    if (e && e.keyCode == 39 && snakeStatus != "left") { // right 键要做的事情
-        snakeOffset = offset.right;
-        snakeStatus = "right";
-        console.log(snakeStatus);
-
+    if (e && e.keyCode == 39) { // right 键要做的事情
+        if (snakeStatus != "left") {
+            snakeOffset = offset.right;
+            snakeStatus = "right";
+            console.log(snakeStatus);
+        }
     }
-    if (e && e.keyCode == 40 && snakeStatus != "up") { // down 键要做的事情
-        snakeOffset = offset.down;
-        snakeStatus = "down";
-        console.log(snakeStatus);
-
+    if (e && e.keyCode == 40) { // down 键要做的事情
+        if (snakeStatus != "up") {
+            snakeOffset = offset.down;
+            snakeStatus = "down";
+            console.log(snakeStatus);
+        }
     }
     if (e && e.keyCode == 32) { // down 键要做的事情
         alert("暂停");

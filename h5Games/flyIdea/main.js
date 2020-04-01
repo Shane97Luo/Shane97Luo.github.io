@@ -26,7 +26,7 @@ function setLine(params) {
 
 // 设置线条颜色
 ctx.strokeStyle = 'red';
-ctx.lineWidth = 1;
+ctx.lineWidth = 2;
 ctx.lineJoin = 'round';
 ctx.lineCap = 'round';
 
@@ -38,8 +38,19 @@ canvas.addEventListener('mouseout', up, false);
 window.addEventListener('resize', onResize, false);
 
 function onResize() {
+
+    var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    ctx.putImageData(imgData, 0, 0);
+
+    // 设置线条颜色
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
 }
 
 function down(evt) {
@@ -123,19 +134,19 @@ function drawLine(beginPoint, controlPoint, endPoint) {
     ctx.closePath();
 }
 
-var cvs = document.getElementById("canvas");
-// cvs.width = window.innerWidth;
-// cvs.hight = window.innerHeight;
+// var cvs = document.getElementById("canvas");
+// // cvs.width = window.innerWidth;
+// // cvs.hight = window.innerHeight;
 
-ctext = cvs.getContext('2d');
-ctext.strokeStyle = 'red';
-ctext.lineWidth = 5;
-ctext.lineJoin = 'round';
-ctext.lineCap = 'round';
+// ctext = cvs.getContext('2d');
+// ctext.strokeStyle = 'red';
+// ctext.lineWidth = 5;
+// ctext.lineJoin = 'round';
+// ctext.lineCap = 'round';
 
-ctext.moveTo(40, 40);
-ctext.lineTo(200, 100);
-ctext.stroke();
+// ctext.moveTo(40, 40);
+// ctext.lineTo(200, 100);
+// ctext.stroke();
 
 var id = 3;
 

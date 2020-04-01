@@ -10,6 +10,16 @@ div#mainview {
     background-color: cadetblue;
 }
 
+div#universal {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    width: 700px;
+    height: 40px;
+    border: 1px solid slategrey;
+    background-color: thistle;
+}
+
 div#tools {
     /* float: left; */
     position: absolute;
@@ -40,5 +50,5 @@ div#canvasManagement {
 }
 
 .canvas {
-    background-color: crimson;
+    background-color: black;
 }

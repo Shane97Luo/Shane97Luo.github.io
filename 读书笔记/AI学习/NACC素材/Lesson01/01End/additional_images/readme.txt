@@ -1,1 +1,0 @@
-Use the sample images in this folder to create your own animated postcard from Alaska like the one you did for Lesson 1 in the book. Explore variations in timing or positioning of each image. Have fun with the creative possibilities!

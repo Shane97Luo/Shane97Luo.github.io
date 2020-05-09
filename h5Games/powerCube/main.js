@@ -372,9 +372,9 @@ function threeStart() {
     initScene();
     initLight();
 
-    // initPlane();
-    // initObject();
-    initTetrahedrons(tetrParm.pos, tetrParm.length, 4);
+    initPlane();
+    initObject();
+    //initTetrahedrons(tetrParm.pos, tetrParm.length, 4);
 
     render();
     //监听鼠标事件

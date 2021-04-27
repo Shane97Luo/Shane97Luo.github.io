@@ -1,4 +1,10 @@
-var renderer; //渲染器
+/******************************************************************
+ * Author:              Shane Luo
+ * Date:                2020 6th June
+ * Email:               shaneluo97@foxmail.com
+ ******************************************************************/
+
+//![1]
 var width; //页面宽度
 var height; //页面高度
 var origPoint = new THREE.Vector3(0, 0, 0); //原点
@@ -10,9 +16,9 @@ var normalize; //触发平面法向量
 var startPoint; //触发点
 var movePoint;
 var initStatus = []; //魔方初始状态
+//![1]
 
-
-//魔方转动的六个方向
+//![2]魔方转动的六个方向
 var xLine = new THREE.Vector3(1, 0, 0); //X轴正方向
 var xLineAd = new THREE.Vector3(-1, 0, 0); //X轴负方向
 var yLine = new THREE.Vector3(0, 1, 0); //Y轴正方向
@@ -20,14 +26,15 @@ var yLineAd = new THREE.Vector3(0, -1, 0); //Y轴负方向
 var zLine = new THREE.Vector3(0, 0, 1); //Z轴正方向
 var zLineAd = new THREE.Vector3(0, 0, -1); //Z轴负方向
 
-var rotaDirection = new function() {
-    this.xposAxis = new THREE.Vector3(1, 0, 0); //X轴正方向
-    this.xnegAxi = new THREE.Vector3(-1, 0, 0); //X轴负方向
-    this.yposAxis = new THREE.Vector3(0, 1, 0); //Y轴正方向
-    this.ynegAxi = new THREE.Vector3(0, -1, 0); //Y轴负方向
-    this.zposAxis = new THREE.Vector3(0, 0, 1); //Z轴正方向
-    this.znegAxi = new THREE.Vector3(0, 0, -1); //Z轴负方向
-}
+// var rotaDirection = {
+//     xposAxis = new THREE.Vector3(1, 0, 0), //X轴正方向
+//     xnegAxi = new THREE.Vector3(-1, 0, 0), //X轴负方向
+//     yposAxis = new THREE.Vector3(0, 1, 0), //Y轴正方向
+//     ynegAxi = new THREE.Vector3(0, -1, 0), //Y轴负方向
+//     zposAxis = new THREE.Vector3(0, 0, 1), //Z轴正方向
+//     znegAxi = new THREE.Vector3(0, 0, -1) //Z轴负方向
+// };
+//![2]
 
 window.requestAnimFrame = (function() { //如果有变化则可能还需要requestAnimationFrame刷新
     return window.requestAnimationFrame ||
@@ -37,6 +44,8 @@ window.requestAnimFrame = (function() { //如果有变化则可能还需要reque
         window.webkitRequestAnimationFrame;
 })();
 
+//![a] 渲染器
+var renderer;
 //根据页面宽度和高度创建渲染器，并添加容器中
 function initThree() {
     width = window.innerWidth;
@@ -52,8 +61,10 @@ function initThree() {
     //document.getElementById('canvas-frame').appendChild(renderer.domElement);
 
 }
+//![a]
 
-//创建相机，并设置正方向和中心点
+
+//![b]创建相机，并设置正方向和中心点
 var camera;
 var controller; //视角控制器
 function initCamera() {
@@ -62,27 +73,42 @@ function initCamera() {
     camera.up.set(0, 1, 0); //正方向
     camera.lookAt(origPoint);
 }
+//![b]
 
+//![c]
 //创建场景，后续元素需要加入到场景中才会显示出来
 var scene;
 
 function initScene() {
     scene = new THREE.Scene();
-
     // 坐标系
-    // var axes = new THREE.AxesHelper(50);
+    // var axes = new THREE.AxesHelper(200);
     // axes.position.set(0, 0, 0);
     // scene.add(axes);
 
 }
+//![c]
 
-//创建光线
+//![d]创建光线
 var light;
 
 function initLight() {
     light = new THREE.AmbientLight(0xfefefe);
     scene.add(light);
 }
+//![d]
+
+//![g]  窗体改变监听器
+function onResize(params) {
+    //camera.aspect = window.innerWidth / window.innerHeight;
+    //camera.updateProjectMatrix;
+    //renderer.setSize(window.innerWidth, window.innerHeight);
+    //threeStart();
+}
+
+window.addEventListener('resize', onResize, false);
+
+//![g]
 
 var cubeParams = { //魔方参数
     x: 0,
@@ -201,16 +227,23 @@ function initObject() {
 
 
 function initPlane() {
-    var PlaneGeometry = new THREE.PlaneGeometry(100, 100);
-    // var PlaneMaterial = new THREE.MeshBasicMaterial({ color: 0xAAAAAA });
-    var PlaneMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+    var PlaneGeometry = new THREE.PlaneGeometry(2000, 2000);
+    var PlaneMaterial = new THREE.MeshBasicMaterial({ color: 0xAAAAAA });
+    // var PlaneMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
 
     shapePlane = new THREE.Mesh(PlaneGeometry, PlaneMaterial);
     shapePlane.rotation.x = -0.5 * Math.PI;
     shapePlane.position.set(0, 0, 0);
     shapePlane.receiveShadow = true;
 
-    scene.add(shapePlane);
+    shapePlane1 = new THREE.Mesh(PlaneGeometry, PlaneMaterial);
+    shapePlane1.rotation.x = 0.5 * Math.PI;
+    shapePlane1.position.set(0, 0, 0);
+    shapePlane1.receiveShadow = true;
+
+    // scene.add(shapePlane);
+    // scene.add(shapePlane1);
+
 }
 
 for (let index = 0; index < 0; index++) {
@@ -374,7 +407,7 @@ function threeStart() {
 
     initPlane();
     initObject();
-    //initTetrahedrons(tetrParm.pos, tetrParm.length, 4);
+    // initTetrahedrons(tetrParm.pos, tetrParm.length, 4);
 
     render();
     //监听鼠标事件

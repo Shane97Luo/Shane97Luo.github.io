@@ -13,7 +13,7 @@ div#mainview {
 div#universal {
     position: absolute;
     top: 10px;
-    left: 20px;
+    left: 100px;
     width: 700px;
     height: 40px;
     border: 1px solid slategrey;
@@ -21,34 +21,40 @@ div#universal {
 }
 
 div#tools {
-    /* float: left; */
+    float: left;
     position: absolute;
     top: 60px;
-    left: 10px;
-    height: 400px;
+    left: 0px;
+    height: 500px;
     width: 50px;
     border: 1px solid rgb(11, 190, 122);
     background-color: bisque;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
-div#paintingArea {
-    float: left;
-    height: 200px;
-    border: 1px solid seagreen;
-    background-color: blueviolet;
+canvas#canvas {
+    /* float: left; */
+    width: 800px;
+    height: 600px;
 }
 
 div#canvasManagement {
-    /* float: right; */
+    float: left;
     position: absolute;
     right: 10px;
     top: 60px;
-    height: 400px;
+    height: 600px;
     width: 50px;
     border: 1px solid seagreen;
     background-color: rgb(22, 96, 165);
 }
 
-.canvas {
-    background-color: black;
-}
+
+/* 
+div#paintingArea {
+    float: left;
+    height: 600px;
+    border: 1px solid seagreen;
+    background-color: blueviolet;
+} */

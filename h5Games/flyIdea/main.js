@@ -119,10 +119,11 @@ function getPos(evt) {
     return {
         x: evt.offsetX == undefined ? evt.layerX : evt.offsetX,
         y: evt.offsetY == undefined ? evt.layerY : evt.offsetY
-
-        //// 相对于浏览器窗口
-        // x: evt.clientX, 
-        // y: evt.clientY
+            // x: evt.clientX - canvas.offsetLeft,
+            // y: evt.clientY - canvas.offsetTop
+            //// 相对于浏览器窗口
+            // x: evt.clientX,
+            // y: evt.clientY
     }
 }
 
